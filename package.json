@@ -1,6 +1,6 @@
 {
   "name": "c2-api-docs",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Express API documenter",
   "main": "lib/index.js",
   "scripts": {
