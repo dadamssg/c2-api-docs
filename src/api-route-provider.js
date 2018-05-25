@@ -16,7 +16,11 @@ export default function (app, options) {
       fileRoutes.push(route)
       const appRoute = app.route(route.path)
       route.methods.forEach(method => {
-        appRoute[method](route.response)
+        if (typeof route.response === 'function') {
+          appRoute[method](route.response)
+        } else {
+          appRoute[method]((req, res) => res.json(route.response))
+        }
       })
     }
   })
