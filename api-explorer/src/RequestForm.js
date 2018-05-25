@@ -80,7 +80,7 @@ export default class RequestForm extends PureComponent {
         <div className='form-group'>
           <label>Method</label>
           <select
-            className='form-control form-control-sm col-2'
+            className='form-control col-2'
             value={method || ''}
             onChange={e => this.props.onMethodChange(e.target.value)}
             disabled={availableMethods.length <= 1}
