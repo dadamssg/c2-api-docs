@@ -61,6 +61,8 @@ The files will automatically get incorporated into the mock server.
 ### Structure
 Route files must export a javascript object. See this example route file.
 ```js
+// server/routes/companies/employees.js
+
 export default {
   path: '/companies/:companyUnid/employees',
   methods: ['get'],
