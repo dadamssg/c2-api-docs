@@ -7,7 +7,8 @@ export default function (app, options) {
   const fileRoutes = []
   glob.sync(`${options.dir}/**/*.js`).forEach(file => {
     const filename = file
-    const route = require(filename)
+    const required = require(filename)
+    const route = required.default || required
     if (file.substr(-2) === 'js') {
       route.filename = filename
       route.methods = route.methods.map(method => method.toLowerCase())
