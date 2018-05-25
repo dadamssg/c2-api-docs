@@ -38,6 +38,9 @@ export default class Route extends PureComponent {
   }
   componentDidMount () {
     const methods = this.availableMethods()
+    if (this.props.route.path === '/ticket/2.0/workorder/update') {
+      console.log(this.props.route, methods)
+    }
     this.setState({
       method: methods[0],
       payload: this.props.route.payload ? JSON.stringify(this.props.route.payload || '', null, 4) : ''

@@ -8,6 +8,13 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
+app.put('/ticket/2.0/workorder/update', function (req, res) {
+  return res.status(201).json({
+    'message': 'Work order updated successfully.',
+    'work_order': {'wo_id': 'foobar'}
+  })
+})
+
 apiDoc(app, {
   dir: path.resolve(__dirname, 'routes'),
   title: 'Example API Docs'
