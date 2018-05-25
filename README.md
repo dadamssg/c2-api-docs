@@ -56,6 +56,7 @@ server/
       save-company.js
   server.js
 ```
+The files will automatically get incorporated into the mock server.
 
 ### Structure
 Route files must export a javascript object. See this example route file.
