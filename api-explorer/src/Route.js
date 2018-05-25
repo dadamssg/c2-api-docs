@@ -5,6 +5,7 @@ import axios from 'axios'
 import moment from 'moment'
 import RequestForm from './RequestForm'
 import config from './config'
+import {Link, withRouter} from 'react-router-dom'
 
 function StatusBadge ({status}) {
   status = String(status)
@@ -21,10 +22,10 @@ StatusBadge.propTypes = {
   status: PropTypes.number
 }
 
-export default class Route extends Component {
+class Route extends Component {
   static propTypes = {
     route: PropTypes.object,
-    status: PropTypes.number
+    location: PropTypes.object
   }
   state = {
     method: null,
@@ -49,11 +50,12 @@ export default class Route extends Component {
     this.setState({
       method: methods[0],
       params: {},
+      query: {},
       response: null,
       payload: this.props.route.payload ? JSON.stringify(this.props.route.payload || '', null, 4) : '',
       requestPath: null,
       requestStatus: null,
-      expanded: false,
+      expanded: this.props.location.pathname.includes('/request/'),
       sending: false
     })
   }
@@ -63,7 +65,6 @@ export default class Route extends Component {
     })
   }
   request = () => {
-    console.log(this.props.route, this.availableMethods(), this.state.method)
     const method = this.state.method
     const {route} = this.props
     const toPath = pathToRegexp.compile(route.path)
@@ -83,6 +84,14 @@ export default class Route extends Component {
         return
       }
     }
+    const queryParams = new URLSearchParams()
+    Object.keys(this.state.query)
+      .filter(q => this.state.query[q])
+      .forEach(q => {
+        queryParams.set(q, this.state.query[q])
+      })
+    const queryString = queryParams.toString()
+    path = `${path}${queryString && `?${queryString}`}`
     this.setState({requestPath: path, sending: true})
     axios[method](`${config.api}${path}`, payload).then(res => {
       this.setState({
@@ -113,17 +122,27 @@ export default class Route extends Component {
     }
     return (
       <div className='card'>
-        <div className='card-body' style={{paddingBottom: '.75rem'}}>
-          <a onClick={() => this.setState({expanded: !this.state.expanded})} style={{cursor: 'pointer'}}>
-            <h6
-              className={`card-subtitle ${this.state.expanded && 'mb-2'} text-muted`}
-            >
-              <span className={'mr-1'} style={{fontWeight: 100}}>
-                ({this.availableMethods().map(m => m.toUpperCase()).join('|')})
-              </span>
-              {route.path}
-            </h6>
-          </a>
+        <div className='card-body' style={{paddingBottom: '.75rem', paddingTop: '1rem'}}>
+          <div className={`row ${this.state.expanded && 'mb-2'}`}>
+            <div className='col'>
+              <a onClick={() => this.setState({expanded: !this.state.expanded})} style={{cursor: 'pointer'}}>
+                <h6
+                  className={`card-subtitle text-muted`}
+                  style={{marginTop: 0}}
+                >
+                  <span className={'mr-1'} style={{fontWeight: 100}}>
+                    {this.availableMethods().map(m => m.toUpperCase()).join('|')}
+                  </span>
+                  {route.path}
+                </h6>
+              </a>
+            </div>
+            <div className='col text-right'>
+              <Link to={`/request/${route.id}`}>
+                <span className='oi oi-link-intact' />
+              </Link>
+            </div>
+          </div>
           {this.state.expanded && (
             <div>
               {route.title && (
@@ -147,6 +166,15 @@ export default class Route extends Component {
                     this.setState({
                       params: {
                         ...this.state.params,
+                        [param]: value
+                      }
+                    })
+                  }}
+                  queryValues={this.state.query}
+                  onQueryChange={(param, value) => {
+                    this.setState({
+                      query: {
+                        ...this.state.query,
                         [param]: value
                       }
                     })
@@ -192,3 +220,5 @@ export default class Route extends Component {
     )
   }
 }
+
+export default withRouter(Route)

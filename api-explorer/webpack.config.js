@@ -11,6 +11,7 @@ let config = {
   entry: {
     app: [
       'babel-polyfill',
+      'url-search-params-polyfill',
       path.resolve(__dirname, 'src', 'index.js'),
       'webpack-dev-server/client?http://localhost:8083'
     ]
@@ -35,7 +36,8 @@ let config = {
   ],
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -57,6 +59,10 @@ let config = {
           fallback: 'style-loader',
           use: [ 'css-loader', 'sass-loader?sourceMap' ]
         })
+      },
+      {
+        test: /\.otf(\?v=\d+\.\d+\.\d+)?$/,
+        use: [ 'file-loader' ]
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
@@ -101,6 +107,7 @@ let config = {
 if (process.env.NODE_ENV === 'production') {
   config.entry.app = [
     'babel-polyfill',
+    'url-search-params-polyfill',
     path.resolve(__dirname, 'src', 'index.js')
   ]
   config.output.path = path.join(__dirname, '../api-explorer-dist')

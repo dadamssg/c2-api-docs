@@ -7,10 +7,12 @@ export default class RequestForm extends PureComponent {
     onSubmit: PropTypes.func,
     params: PropTypes.array,
     paramValues: PropTypes.object,
+    queryValues: PropTypes.object,
     payload: PropTypes.string,
     method: PropTypes.string,
     availableMethods: PropTypes.array,
     onParamChange: PropTypes.func,
+    onQueryChange: PropTypes.func,
     onMethodChange: PropTypes.func,
     onPayloadChange: PropTypes.func,
     sending: PropTypes.bool
@@ -21,16 +23,21 @@ export default class RequestForm extends PureComponent {
   }
   render () {
     const {
+      route,
       params,
       paramValues,
       payload,
       method,
-      availableMethods
+      availableMethods,
+      queryValues
     } = this.props
+    const paramDesc = route.params || {}
+    const queryParams = Object.keys(route.query || {}).sort()
+    const queryDesc = route.query || {}
     return (
       <form onSubmit={this.onSubmit}>
-        {params.length > 0 && (
-          <div className='row'>
+        <div className='row'>
+          {params.length > 0 && (
             <div className='col'>
               <h6>URL Params</h6>
               {params.map(param => (
@@ -42,15 +49,37 @@ export default class RequestForm extends PureComponent {
                     value={paramValues[param.name] || ''}
                     onChange={e => this.props.onParamChange(param.name, e.target.value)}
                   />
+                  {paramDesc[param.name] && (
+                    <small>{paramDesc[param.name]}</small>
+                  )}
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          )}
+          {queryParams.length > 0 && (
+            <div className='col'>
+              <h6>Query Params</h6>
+              {queryParams.map(param => (
+                <div key={param} className='form-group'>
+                  <label>{param}</label>
+                  <input
+                    className='form-control col-2'
+                    placeholder={param}
+                    value={queryValues[param] || ''}
+                    onChange={e => this.props.onQueryChange(param, e.target.value)}
+                  />
+                  {queryDesc[param] && (
+                    <small>{queryDesc[param]}</small>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <div className='form-group'>
           <label>Method</label>
           <select
-            className='form-control col-2'
+            className='form-control form-control-sm col-2'
             value={method || ''}
             onChange={e => this.props.onMethodChange(e.target.value)}
             disabled={availableMethods.length <= 1}
