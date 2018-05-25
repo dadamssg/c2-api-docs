@@ -12,7 +12,7 @@ Create a new `routes` directory.
 ```
 server/
 	routes/
-    server.js
+	server.js
 ```
 
 In your express api bootstrap file:
@@ -51,9 +51,9 @@ This package gives you a new way to define mock endpoints through route files. R
 server/
 	routes/
 		auth-info.js
-    	companies/
-        	get-companies.js
-            save-company.js
+		companies/
+			get-companies.js
+			save-company.js
 	server.js
 ```
 
@@ -66,15 +66,15 @@ export default {
   title: 'Company employees',
   description: 'Fetches all active employees',
   response: {
-      employees: [
-        {
-          name: 'John Doe'
-        },
-        {
-          name: 'Bob Smith'
-        }
-      ]
-    }
+    employees: [
+      {
+        name: 'John Doe'
+      },
+      {
+        name: 'Bob Smith'
+      }
+    ]
+  }
 }
 
 ```
@@ -108,11 +108,11 @@ This will prepolate this params input in the api explorer. You can provide addit
 export default {
   path: '/companies/:companyUnid/employees',
   params: {
-  	companyUnid: {
-    	value: 'abcdef',
-        help: 'Company Unid'
-    }
-  }
+		companyUnid: {
+			value: 'abcdef',
+			help: 'Company Unid'
+		}
+	}
   // ...
 }
 ```
@@ -124,11 +124,11 @@ Query params can be defined in the same way.
 export default {
   path: '/companies/:companyUnid/employees',
   query: {
-  	hiredAfter: {
-    	value: '01-01-2018',
-        help: 'Format MM-DD-YYYY'
-    }
-  }
+		hiredAfter: {
+			value: '01-01-2018',
+			help: 'Format MM-DD-YYYY'
+		}
+	}
   // ...
 }
 ```
@@ -140,11 +140,11 @@ export default {
   path: '/contact',
   methods: ['post'],
   payload: {
-  	contact: {
-    	firstName: 'John',
-        lastName: 'Doe'
-    }
-  }
+		contact: {
+			firstName: 'John',
+			lastName: 'Doe'
+		}
+	}
   // ...
 }
 ```
@@ -155,20 +155,20 @@ export default {
   path: '/contact',
   methods: ['post', 'put'],
   payload: {
-  	POST: {
-    	contact: {
-          firstName: 'John',
-          lastName: 'Doe'
-    	}
-    },
-    PUT: {
-    	contact: {
-          id: 'abcded',
-          firstName: 'John',
-          lastName: 'Doe'
-    	}
-    }
-  }
+		POST: {
+			contact: {
+				firstName: 'John',
+				lastName: 'Doe'
+			}
+		},
+		PUT: {
+			contact: {
+				id: 'abcded',
+				firstName: 'John',
+				lastName: 'Doe'
+			}
+		}
+	}
   // ...
 }
 ```
@@ -180,13 +180,13 @@ export default {
   path: '/people',
   methods: ['get'],
   response: {
-  	people: {
-    	[
-        	{name: 'John Doe'},
-            {name: 'Bob Smith'}
-        ]
-  	}
-  }
+		people: {
+			[
+				{name: 'John Doe'},
+				{name: 'Bob Smith'}
+			]
+		}
+	}
 }
 ```
 Or dynamically generate a response based on the request.
