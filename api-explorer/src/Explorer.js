@@ -51,7 +51,7 @@ export default class Explorer extends PureComponent {
             <button
               className='btn btn-secondary'
               type='button'
-              onClick={() => this.setState({search: null})}
+              onClick={() => this.setState({search: null, page: 0})}
             >&times;</button>
           </div>
         </div>
