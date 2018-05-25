@@ -57,7 +57,7 @@ export default class Explorer extends PureComponent {
         </div>
         {routes.map((route, i) => (
           <div key={i} className={'mb-2'}>
-            <Route route={route} />
+            <Route key={i} route={route} />
           </div>
         ))}
         <div className='text-center' id={'react-paginate'}>

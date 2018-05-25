@@ -17,6 +17,7 @@ app.put('/ticket/2.0/workorder/update', function (req, res) {
 
 apiDoc(app, {
   dir: path.resolve(__dirname, 'routes'),
+  require,
   title: 'Example API Docs'
 })
 

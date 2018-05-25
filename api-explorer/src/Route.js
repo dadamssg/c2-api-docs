@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import pathToRegexp from 'path-to-regexp'
 import axios from 'axios'
@@ -21,7 +21,7 @@ StatusBadge.propTypes = {
   status: PropTypes.number
 }
 
-export default class Route extends PureComponent {
+export default class Route extends Component {
   static propTypes = {
     route: PropTypes.object,
     status: PropTypes.number
@@ -37,13 +37,24 @@ export default class Route extends PureComponent {
     sending: false
   }
   componentDidMount () {
-    const methods = this.availableMethods()
-    if (this.props.route.path === '/ticket/2.0/workorder/update') {
-      console.log(this.props.route, methods)
+    this.init()
+  }
+  componentDidUpdate (prevProps) {
+    if (prevProps.route !== this.props.route) {
+      this.init()
     }
+  }
+  init = () => {
+    const methods = this.availableMethods()
     this.setState({
       method: methods[0],
-      payload: this.props.route.payload ? JSON.stringify(this.props.route.payload || '', null, 4) : ''
+      params: {},
+      response: null,
+      payload: this.props.route.payload ? JSON.stringify(this.props.route.payload || '', null, 4) : '',
+      requestPath: null,
+      requestStatus: null,
+      expanded: false,
+      sending: false
     })
   }
   availableMethods = () => {
@@ -52,6 +63,7 @@ export default class Route extends PureComponent {
     })
   }
   request = () => {
+    console.log(this.props.route, this.availableMethods(), this.state.method)
     const method = this.state.method
     const {route} = this.props
     const toPath = pathToRegexp.compile(route.path)

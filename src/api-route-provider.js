@@ -5,10 +5,9 @@ import glob from 'glob'
 
 export default function (app, options) {
   const fileRoutes = []
-  console.log(glob.sync(`${options.dir}/**/*.js`))
   glob.sync(`${options.dir}/**/*.js`).forEach(file => {
     const filename = file
-    const route = require(filename)
+    const route = options.require(filename)
     if (file.substr(-2) === 'js') {
       route.filename = filename
       route.methods = route.methods.map(method => method.toLowerCase())
