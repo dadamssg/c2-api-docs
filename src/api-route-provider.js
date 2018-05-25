@@ -59,7 +59,7 @@ export default function (app, options) {
           payload: fileRoute.payload
         }
       })
-      .filter(r => !['/_api', '/_docs'].includes(r.path))
+      .filter(r => !['/_api', '/_docs', '*'].includes(r.path))
     return res.json({
       routes: cleaned,
       title: options.title
