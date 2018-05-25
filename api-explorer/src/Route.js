@@ -46,11 +46,20 @@ class Route extends Component {
     }
   }
   init = () => {
+    const {route} = this.props
     const methods = this.availableMethods()
+    const paramValues = {}
+    Object.keys(route.params).forEach(key => {
+      paramValues[key] = route.params[key].value
+    })
+    const queryValues = {}
+    Object.keys(route.query).forEach(key => {
+      queryValues[key] = route.query[key].value
+    })
     this.setState({
       method: methods[0],
-      params: {},
-      query: {},
+      params: paramValues,
+      query: queryValues,
       response: null,
       payload: this.props.route.payload ? JSON.stringify(this.props.route.payload || '', null, 4) : '',
       requestPath: null,
@@ -195,8 +204,11 @@ class Route extends Component {
                         <StatusBadge status={this.state.requestStatus} /> {this.state.requestPath}
                       </div>
                       <div className='col col-1 text-right'>
-                        <button className={'btn btn-sm btn-primary'} onClick={() => this.setState({response: null})}>
-                          x
+                        <button
+                          title='Remove response'
+                          className={'btn btn-sm tn-secondary'}
+                          onClick={() => this.setState({response: null})}>
+                          <span className='oi oi-trash' />
                         </button>
                       </div>
                     </div>

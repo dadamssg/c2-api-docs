@@ -21,6 +21,9 @@ export default class RequestForm extends PureComponent {
     e.preventDefault()
     this.props.onSubmit()
   }
+  getHelp = (params, name) => {
+    return params[name] ? (params[name].help || '') : ''
+  }
   render () {
     const {
       route,
@@ -45,12 +48,11 @@ export default class RequestForm extends PureComponent {
                   <label>{param.name}</label>
                   <input
                     className='form-control'
-                    placeholder={param.name}
                     value={paramValues[param.name] || ''}
                     onChange={e => this.props.onParamChange(param.name, e.target.value)}
                   />
-                  {paramDesc[param.name] && (
-                    <small>{paramDesc[param.name]}</small>
+                  {this.getHelp(paramDesc, param.name) && (
+                    <small>{this.getHelp(paramDesc, param.name)}</small>
                   )}
                 </div>
               ))}
@@ -64,12 +66,11 @@ export default class RequestForm extends PureComponent {
                   <label>{param}</label>
                   <input
                     className='form-control'
-                    placeholder={param}
                     value={queryValues[param] || ''}
                     onChange={e => this.props.onQueryChange(param, e.target.value)}
                   />
-                  {queryDesc[param] && (
-                    <small>{queryDesc[param]}</small>
+                  {this.getHelp(queryDesc, param) && (
+                    <small>{this.getHelp(queryDesc, param)}</small>
                   )}
                 </div>
               ))}

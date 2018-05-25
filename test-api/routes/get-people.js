@@ -1,10 +1,15 @@
 module.exports = {
-  path: '/people',
+  path: '/people/:id',
   params: {
-    id: 'Person unid'
+    id: {
+      value: 'abc',
+      help: 'this is some help text'
+    }
   },
   query: {
-    foobar: 'blah blah'
+    startDate: {
+      help: 'Format MM-DD-YYYY'
+    }
   },
   methods: ['post', 'put', 'get'],
   title: 'Get all people',
