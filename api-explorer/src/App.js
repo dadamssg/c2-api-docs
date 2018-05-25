@@ -6,6 +6,8 @@ import Explorer from './Explorer'
 import config from './config'
 import RoutePage from './RoutePage'
 
+const defaultTitle = 'API Docs'
+
 export function normalizeParams (params = {}) {
   const newParams = {}
   Object.keys(params).forEach(key => {
@@ -25,6 +27,9 @@ class App extends Component {
   }
   componentDidMount () {
     axios.get(`${config.api}/_api`).then(res => {
+      if (res.data.title) {
+        document.title = res.data.title
+      }
       const routes = res.data.routes.map(r => {
         const id = window.btoa(`${r.path}-${Object.keys(r.methods).join('-')}`)
         return {
@@ -44,7 +49,7 @@ class App extends Component {
     return (
       <Router basename={config.env === 'production' ? '/_docs/' : undefined}>
         <div className={'container mt-5'}>
-          <Link id='app-title' to={'/'}><h1>{this.state.title || 'C2 API Docs'}</h1></Link>
+          <Link id='app-title' to={'/'}><h1>{this.state.title || defaultTitle}</h1></Link>
           <Route exact path='/' render={() => <Explorer routes={this.state.routes} />} />
           <Route path='/request/:id' component={() => <RoutePage routes={this.state.routes} />} />
         </div>
