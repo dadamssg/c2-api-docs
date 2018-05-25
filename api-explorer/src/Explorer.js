@@ -26,7 +26,7 @@ export default class Explorer extends PureComponent {
       const searchString = `${route.path} ${route.title} ${route.description}`
       return this.state.search ? searchString.includes(this.state.search) : true
     })
-    const numberPerPage = 10
+    const numberPerPage = 20
     const pageCount = Math.ceil(routes.length / numberPerPage)
     const begin = (this.state.page * numberPerPage)
     const end = begin + numberPerPage
