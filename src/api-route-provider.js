@@ -5,7 +5,7 @@ import glob from 'glob'
 
 export default function (app, options) {
   const fileRoutes = []
-  glob.sync(`${options.dir}/**/*.js`).forEach(file => {
+  glob.sync(`${options.routes}/**/*.js`).forEach(file => {
     const filename = file
     const required = require(filename)
     const route = required.default || required
