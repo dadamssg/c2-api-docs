@@ -56,17 +56,28 @@ class Route extends Component {
     Object.keys(route.query).forEach(key => {
       queryValues[key] = route.query[key].value
     })
+    const method = methods[0]
+    const payload = this.getPayload(method)
     this.setState({
-      method: methods[0],
+      method,
       params: paramValues,
       query: queryValues,
       response: null,
-      payload: this.props.route.payload ? JSON.stringify(this.props.route.payload || '', null, 4) : '',
+      payload: payload || '',
       requestPath: null,
       requestStatus: null,
       expanded: this.props.location.pathname.includes('/request/'),
       sending: false
     })
+  }
+  getPayload = method => {
+    const {route} = this.props
+    let payload = route.payload
+    if (!payload) return ''
+    if (typeof payload === 'object' && !Array.isArray(payload)) {
+      payload = payload[method.toUpperCase()] || payload
+    }
+    return JSON.stringify(payload || '', null, 4) || ''
   }
   availableMethods = () => {
     return ['get', 'post', 'put', 'delete'].filter(m => {
@@ -191,7 +202,11 @@ class Route extends Component {
                   payload={this.state.payload}
                   onPayloadChange={payload => this.setState({payload})}
                   method={this.state.method}
-                  onMethodChange={method => this.setState({method, response: null})}
+                  onMethodChange={method => this.setState({
+                    method,
+                    response: null,
+                    payload: this.getPayload(method)
+                  })}
                   onSubmit={this.request}
                   sending={this.state.sending}
                 />
