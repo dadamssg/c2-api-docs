@@ -67,4 +67,7 @@ export default function (app, options) {
   })
 
   app.use('/_docs', express.static(path.resolve(__dirname, '../', 'api-explorer-dist')))
+  app.get('*', function (req, res) {
+    res.sendFile(path.resolve(__dirname, '../', 'api-explorer-dist', 'index.html'))
+  })
 }
