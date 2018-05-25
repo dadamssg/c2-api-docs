@@ -44,7 +44,7 @@ export default class RequestForm extends PureComponent {
                 <div key={param.name} className='form-group'>
                   <label>{param.name}</label>
                   <input
-                    className='form-control col-2'
+                    className='form-control'
                     placeholder={param.name}
                     value={paramValues[param.name] || ''}
                     onChange={e => this.props.onParamChange(param.name, e.target.value)}
@@ -63,7 +63,7 @@ export default class RequestForm extends PureComponent {
                 <div key={param} className='form-group'>
                   <label>{param}</label>
                   <input
-                    className='form-control col-2'
+                    className='form-control'
                     placeholder={param}
                     value={queryValues[param] || ''}
                     onChange={e => this.props.onQueryChange(param, e.target.value)}
