@@ -99,6 +99,10 @@ let config = {
 }
 
 if (process.env.NODE_ENV === 'production') {
+  config.entry.app = [
+    'babel-polyfill',
+    path.resolve(__dirname, 'src', 'index.js')
+  ]
   config.output.path = path.join(__dirname, '../api-explorer-dist')
   config.output.publicPath = '/_docs/'
 }
