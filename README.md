@@ -11,8 +11,8 @@ Create a new `routes` directory.
 
 ```
 server/
-	routes/
-	server.js
+  routes/
+  server.js
 ```
 
 In your express api bootstrap file:
