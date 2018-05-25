@@ -103,7 +103,7 @@ export default {
 }
 ```
 
-This will prepolate this params input in the api explorer. You can provide additional help text by using an object.
+This will prepopulate this params input in the api explorer. You can provide additional help text by using an object.
 ```js
 export default {
   path: '/companies/:companyUnid/employees',
