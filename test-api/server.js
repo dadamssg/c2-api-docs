@@ -2,7 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import path from 'path'
 import cors from 'cors'
-import apiDoc from '../src/api-route-provider'
+import document from '../src/api-route-provider'
 
 const app = express()
 app.use(cors())
@@ -10,12 +10,11 @@ app.use(bodyParser.json())
 
 app.put('/ticket/2.0/workorder/update', function (req, res) {
   return res.status(201).json({
-    'message': 'Work order updated successfully.',
-    'work_order': {'wo_id': 'foobar'}
+    'message': 'Work order updated successfully.'
   })
 })
 
-apiDoc(app, {
+document(app, {
   routes: path.resolve(__dirname, 'routes'),
   title: 'Example API Docs'
 })
