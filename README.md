@@ -198,7 +198,7 @@ Functions that return fixtures.
 export default {
   path: '/people',
   methods: ['GET'],
-  response: () => require('../fixtures/peope.json')
+  response: (req, res) => res.json(require('../fixtures/peope.json'))
 }
 ```
 
