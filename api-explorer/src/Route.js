@@ -33,7 +33,7 @@ class Route extends Component {
       <div className='card'>
         <div className='card-body' style={{paddingBottom: '.75rem', paddingTop: '1rem'}}>
           <div className={`row ${this.state.expanded && 'mb-2'}`}>
-            <div className='col'>
+            <div className='col-11'>
               <a onClick={() => this.setState({expanded: !this.state.expanded})} style={{cursor: 'pointer'}}>
                 <h6
                   className={`card-subtitle text-muted`}
@@ -46,7 +46,7 @@ class Route extends Component {
                 </h6>
               </a>
             </div>
-            <div className='col text-right'>
+            <div className='col-1 text-right'>
               <Link to={`/request/${route.id}`}>
                 <span className='oi oi-link-intact' />
               </Link>
