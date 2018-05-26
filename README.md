@@ -177,7 +177,7 @@ export default {
 ```
 
 #### response
-Responses can be simple javascript objects.
+Responses can be simple javascript objects...
 ```js
 export default {
   path: '/people',
@@ -193,7 +193,7 @@ export default {
 }
 ```
 
-Or come from fixture files.
+Or come from fixture files...
 ```js
 export default {
   path: '/people',
@@ -202,7 +202,7 @@ export default {
 }
 ```
 
-Or dynamically generate a response based on the request.
+Or dynamically generated based on the request...
 
 ```js
 export default {
