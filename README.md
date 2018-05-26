@@ -137,7 +137,7 @@ export default {
 ```
 
 #### payload
-`POST` and `PUT` methods allow for example payloads. These payloads will populate the payload input in the api explorer.
+`POST`, `PUT`, and `PATCH` methods allow for example payloads. These payloads will populate the payload input in the api explorer.
 ```js
 export default {
   path: '/contact',
