@@ -177,7 +177,7 @@ export default {
 ```
 
 #### response
-Endpoints return responses. These can be simple javascript objects.
+Responses can be simple javascript objects.
 ```js
 export default {
   path: '/people',
@@ -192,6 +192,16 @@ export default {
   }
 }
 ```
+
+Functions that return fixtures.
+```js
+export default {
+  path: '/people',
+  methods: ['GET'],
+  response: () => require('../fixtures/peope.json')
+}
+```
+
 Or dynamically generate a response based on the request.
 
 ```js
