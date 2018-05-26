@@ -193,12 +193,12 @@ export default {
 }
 ```
 
-Functions that return fixtures.
+Or come from fixture files.
 ```js
 export default {
   path: '/people',
   methods: ['GET'],
-  response: (req, res) => res.json(require('../fixtures/peope.json'))
+  response: require('../fixtures/peope.json')
 }
 ```
 
