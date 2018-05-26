@@ -121,7 +121,7 @@ export default {
 ```
 The `help` text will show up directly beneath the param's input in the api explorer.
 
-#### query Params
+#### query params
 Query params can be defined in the same way.
 ```js
 export default {
