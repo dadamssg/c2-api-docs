@@ -177,7 +177,7 @@ export default {
 ```
 
 #### response
-Endpoints return responses. These can be a javascript object.
+Endpoints return responses. These can be simple javascript objects.
 ```js
 export default {
   path: '/people',
