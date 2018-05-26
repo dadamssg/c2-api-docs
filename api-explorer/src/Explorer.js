@@ -10,11 +10,6 @@ class Explorer extends PureComponent {
     history: PropTypes.object,
     routes: PropTypes.array
   }
-  state = {
-    search: null,
-    title: null,
-    page: 0
-  }
   redirect = (values = {}) => {
     const queryParams = new URLSearchParams(this.props.location.search)
     Object.keys(values).forEach(key => {
@@ -77,7 +72,7 @@ class Explorer extends PureComponent {
             <Route key={i} route={route} />
           </div>
         ))}
-        <div className='text-center' id={'react-paginate'}>
+        <div className='text-center' id='react-paginate'>
           <ReactPaginate
             previousLabel='Prev'
             nextLabel='Next'

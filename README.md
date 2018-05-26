@@ -65,7 +65,7 @@ Route files must export a javascript object. See this example route file.
 
 export default {
   path: '/companies/:companyUnid/employees',
-  methods: ['get'],
+  methods: ['GET'],
   title: 'Company employees',
   description: 'Fetches all active employees',
   response: {
@@ -86,7 +86,7 @@ export default {
 This must be a valid express route path.
 
 #### methods
-This must be an array of http verbs that this endpoint responds to. Ex. `['get', 'post', 'put', 'delete']`
+This must be an array of http verbs that this endpoint responds to. Ex. `['GET', 'POST', 'PUT', 'PATCH', 'DELETE']`
 
 #### title
 Only used for documentation in the api explorer ui.
@@ -141,7 +141,7 @@ export default {
 ```js
 export default {
   path: '/contact',
-  methods: ['post'],
+  methods: ['POST'],
   payload: {
     contact: {
       firstName: 'John',
@@ -156,7 +156,7 @@ In the case of endpoints accepting both `POST` and `PUT` requests, you can defin
 ```js
 export default {
   path: '/contact',
-  methods: ['post', 'put'],
+  methods: ['POST', 'PUT'],
   payload: {
     POST: {
       contact: {
@@ -181,7 +181,7 @@ Endpoints return responses. These can be a javascript object.
 ```js
 export default {
   path: '/people',
-  methods: ['get'],
+  methods: ['GET'],
   response: {
     people: {
       [
@@ -197,7 +197,7 @@ Or dynamically generate a response based on the request.
 ```js
 export default {
   path: '/people',
-  methods: ['get', 'post', 'put'],
+  methods: ['GET', 'POST', 'PUT'],
   response: (req, res) => {
     if (req.method === 'POST') {
       return res.status(400).json({

@@ -12,12 +12,9 @@ class RoutePage extends PureComponent {
   render () {
     const {match} = this.props
     const route = this.props.routes.find(r => r.id === match.params.id)
-    if (!route) {
-      return <div className={'text-center'}>No route found...</div>
-    }
-    return (
-      <Route route={route} />
-    )
+    return route
+      ? <Route route={route} />
+      : <div className={'text-center'}>No route found...</div>
   }
 }
 

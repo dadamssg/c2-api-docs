@@ -1,26 +1,10 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
-import pathToRegexp from 'path-to-regexp'
-import axios from 'axios'
 import moment from 'moment'
-import RequestForm from './RequestForm'
-import config from './config'
 import {Link, withRouter} from 'react-router-dom'
-
-function StatusBadge ({status}) {
-  status = String(status)
-  const leadingNumber = status.substr(0, 1)
-  let className = 'badge-secondary'
-  if (leadingNumber === '2') className = 'badge-success'
-  if (leadingNumber === '3') className = 'badge-dark'
-  if (leadingNumber === '4') className = 'badge-warning'
-  if (leadingNumber === '5') className = 'badge-danger'
-
-  return <span className={`badge ${className}`}>{status}</span>
-}
-StatusBadge.propTypes = {
-  status: PropTypes.number
-}
+import Response from './Response'
+import * as utils from './utils'
+import RequestForm from './RequestForm'
 
 class Route extends Component {
   static propTypes = {
@@ -28,118 +12,23 @@ class Route extends Component {
     location: PropTypes.object
   }
   state = {
-    method: null,
-    params: {},
-    response: null,
-    payload: null,
-    requestPath: null,
-    requestStatus: null,
-    expanded: false,
-    sending: false
+    expanded: false
   }
   componentDidMount () {
-    this.init()
+    this.expandIfLinked()
   }
-  componentDidUpdate (prevProps) {
-    if (prevProps.route !== this.props.route) {
-      this.init()
+  componentDidUpdate (props) {
+    if (props.route !== this.props.route) {
+      this.expandIfLinked()
     }
   }
-  init = () => {
-    const {route} = this.props
-    const methods = this.availableMethods()
-    const paramValues = {}
-    Object.keys(route.params).forEach(key => {
-      paramValues[key] = route.params[key].value
-    })
-    const queryValues = {}
-    Object.keys(route.query).forEach(key => {
-      queryValues[key] = route.query[key].value
-    })
-    const method = methods[0]
-    const payload = this.getPayload(method)
+  expandIfLinked = () => {
     this.setState({
-      method,
-      params: paramValues,
-      query: queryValues,
-      response: null,
-      payload: payload || '',
-      requestPath: null,
-      requestStatus: null,
-      expanded: this.props.location.pathname.includes('/request/'),
-      sending: false
+      expanded: this.props.location.pathname.includes('/request/')
     })
-  }
-  getPayload = method => {
-    const {route} = this.props
-    let payload = route.payload
-    if (!payload) return ''
-    if (typeof payload === 'object' && !Array.isArray(payload)) {
-      payload = payload[method.toUpperCase()] || payload
-    }
-    return JSON.stringify(payload || '', null, 4) || ''
-  }
-  availableMethods = () => {
-    return ['get', 'post', 'put', 'delete'].filter(m => {
-      return Object.keys(this.props.route.methods).includes(m)
-    })
-  }
-  request = () => {
-    const method = this.state.method
-    const {route} = this.props
-    const toPath = pathToRegexp.compile(route.path)
-    let path = null
-    try {
-      path = toPath(this.state.params)
-    } catch (e) {
-      window.alert(e)
-      return
-    }
-    let payload
-    if (['post', 'put'].includes(method) && this.state.payload) {
-      try {
-        payload = JSON.parse(this.state.payload)
-      } catch (e) {
-        window.alert('Invalid json')
-        return
-      }
-    }
-    const queryParams = new URLSearchParams()
-    Object.keys(this.state.query)
-      .filter(q => this.state.query[q])
-      .forEach(q => {
-        queryParams.set(q, this.state.query[q])
-      })
-    const queryString = queryParams.toString()
-    path = `${path}${queryString && `?${queryString}`}`
-    this.setState({requestPath: path, sending: true})
-    axios[method](`${config.api}${path}`, payload).then(res => {
-      this.setState({
-        response: res.data,
-        requestStatus: res.status,
-        sending: false
-      })
-    })
-      .catch(error => {
-        this.setState({
-          response: error.response.data,
-          requestStatus: error.response.status,
-          sending: false
-        })
-      })
   }
   render () {
     const {route} = this.props
-    let urlParams = []
-    pathToRegexp(route.path, urlParams)
-    let response = null
-    try {
-      if (this.state.response) {
-        response = JSON.stringify(this.state.response, null, 4)
-      }
-    } catch (e) {
-      response = this.state.response
-    }
     return (
       <div className='card'>
         <div className='card-body' style={{paddingBottom: '.75rem', paddingTop: '1rem'}}>
@@ -151,7 +40,7 @@ class Route extends Component {
                   style={{marginTop: 0}}
                 >
                   <span className={'mr-1'} style={{fontWeight: 100}}>
-                    {this.availableMethods().map(m => m.toUpperCase()).join('|')}
+                    {utils.getAvailableMethods(route).map(m => m.toUpperCase()).join('|')}
                   </span>
                   {route.path}
                 </h6>
@@ -164,7 +53,7 @@ class Route extends Component {
             </div>
           </div>
           {this.state.expanded && (
-            <div>
+            <Fragment>
               {route.title && (
                 <h5 className='card-title'>
                   {route.title || route.path}
@@ -179,68 +68,21 @@ class Route extends Component {
                 <hr />
                 <RequestForm
                   route={route}
-                  availableMethods={this.availableMethods()}
-                  params={urlParams}
-                  paramValues={this.state.params}
-                  onParamChange={(param, value) => {
-                    this.setState({
-                      params: {
-                        ...this.state.params,
-                        [param]: value
-                      }
-                    })
-                  }}
-                  queryValues={this.state.query}
-                  onQueryChange={(param, value) => {
-                    this.setState({
-                      query: {
-                        ...this.state.query,
-                        [param]: value
-                      }
-                    })
-                  }}
-                  payload={this.state.payload}
-                  onPayloadChange={payload => this.setState({payload})}
-                  method={this.state.method}
-                  onMethodChange={method => this.setState({
-                    method,
-                    response: null,
-                    payload: this.getPayload(method)
-                  })}
-                  onSubmit={this.request}
-                  sending={this.state.sending}
+                  setResponse={response => this.setState({response})}
                 />
               </div>
-              <div>
-                {response && (
-                  <div>
-                    <div className='row mt-4'>
-                      <div className='col col-11'>
-                        <StatusBadge status={this.state.requestStatus} /> {this.state.requestPath}
-                      </div>
-                      <div className='col col-1 text-right'>
-                        <button
-                          title='Remove response'
-                          className={'btn btn-sm tn-secondary'}
-                          onClick={() => this.setState({response: null})}>
-                          <span className='oi oi-trash' />
-                        </button>
-                      </div>
-                    </div>
-                    <pre className={'border mt-2 bg-light'} style={{padding: '1rem'}}>
-                      <code>
-                        {response}
-                      </code>
-                    </pre>
-                  </div>
-                )}
-              </div>
+              {this.state.response && (
+                <Response
+                  onRemove={() => this.setState({response: null})}
+                  response={this.state.response}
+                />
+              )}
               {route.filename && (
                 <p className={'card-text text-right mr-1 text-muted'}>
                   <small>{route.filename} - {moment(route.modified).local().format('M-D-YYYY h:mm a')}</small>
                 </p>
               )}
-            </div>
+            </Fragment>
           )}
         </div>
       </div>
