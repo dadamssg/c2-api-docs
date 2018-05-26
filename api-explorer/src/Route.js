@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import {Link, withRouter} from 'react-router-dom'
+import {markdown} from 'markdown'
 import Response from './Response'
 import * as utils from './utils'
 import RequestForm from './RequestForm'
@@ -60,9 +61,12 @@ class Route extends Component {
                 </h5>
               )}
               {route.description && (
-                <p className='card-text'>
-                  {route.description}
-                </p>
+                <p
+                  className='card-text'
+                  dangerouslySetInnerHTML={{
+                    __html: markdown.toHTML(route.description) || ''
+                  }}
+                />
               )}
               <div className={'text-left'}>
                 <hr />

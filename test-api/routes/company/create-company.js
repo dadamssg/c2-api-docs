@@ -1,8 +1,15 @@
+const description = `
+
+This *is* some **text**. Action can be found at \`company/actions.saveCompany()\`.
+
+test
+`
+
 module.exports = {
   path: '/companies',
   methods: ['post'],
   title: 'Create a company',
-  description: 'This is an endpoint to fetch all people',
+  description: description,
   payload: {
     data: {
       blah: 'blah blah'
