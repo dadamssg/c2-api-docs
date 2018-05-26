@@ -84,7 +84,7 @@ class Explorer extends PureComponent {
             onPageChange={({selected}) => {
               this.redirect({page: selected})
             }}
-            containerClassName={`pagination ${pageCount <= 1 ? 'hidden' : ''}`}
+            containerClassName={`pagination ${pageCount <= 1 ? 'd-none' : ''}`}
             subContainerClassName='pages pagination'
             activeClassName='active'
             breakClassName='page-item'
