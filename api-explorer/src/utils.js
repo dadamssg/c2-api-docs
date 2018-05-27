@@ -41,3 +41,14 @@ export function getQueryParams (route) {
     }
   })
 }
+
+export function buildRouteSearchString (route) {
+  const simplePath = '/' + route.path
+    .split('/')
+    .filter(p => !!p)
+    .map(p => {
+      return p.includes(':') ? ':' : p
+    })
+    .join('/')
+  return `${route.path} ${simplePath} ${route.title} ${route.description}`
+}

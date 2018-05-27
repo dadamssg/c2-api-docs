@@ -26,8 +26,7 @@ class Explorer extends PureComponent {
     const search = queryParams.get('q') || ''
     const page = Number(queryParams.get('page')) || 0
     let routes = this.props.routes.filter(route => {
-      const searchString = `${route.path} ${route.title} ${route.description}`
-      return search ? searchString.includes(search) : true
+      return route.search.includes(search)
     })
     const numberPerPage = 20
     const pageCount = Math.ceil(routes.length / numberPerPage)

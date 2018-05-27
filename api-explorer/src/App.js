@@ -5,6 +5,7 @@ import axios from 'axios'
 import Explorer from './Explorer'
 import config from './config'
 import RoutePage from './RoutePage'
+import {buildRouteSearchString} from './utils'
 
 const defaultTitle = 'API Docs'
 
@@ -36,7 +37,8 @@ class App extends Component {
           ...r,
           id,
           params: normalizeParams(r.params),
-          query: normalizeParams(r.query)
+          query: normalizeParams(r.query),
+          search: buildRouteSearchString(r)
         }
       })
       this.setState({

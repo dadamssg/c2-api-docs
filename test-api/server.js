@@ -14,8 +14,16 @@ app.put('/ticket/2.0/workorder/update', function (req, res) {
   })
 })
 
+app.put('/companies/:unid/workorder/:id/foobar', function (req, res) {
+  return res.status(201).json({
+    'message': 'Work order updated successfully.'
+  })
+})
+
 document(app, {
   routes: path.resolve(__dirname, 'routes'),
+  src: path.resolve(__dirname, '..', 'test-src'),
+  server: path.resolve(__dirname, '..', 'test-api'),
   title: 'Example API Docs'
 })
 

@@ -66,3 +66,5 @@ typings/
 # package managers
 package-lock.json
 .idea
+src/grep.js
+src/test.js
