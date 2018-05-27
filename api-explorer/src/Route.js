@@ -6,6 +6,7 @@ import {markdown} from 'markdown'
 import Response from './Response'
 import * as utils from './utils'
 import RequestForm from './RequestForm'
+import PathReferences from './PathReferences'
 
 class Route extends Component {
   static propTypes = {
@@ -81,11 +82,9 @@ class Route extends Component {
                   response={this.state.response}
                 />
               )}
-              {route.filename && (
-                <p className={'card-text text-right mr-1 text-muted'}>
-                  <small>{route.filename} - {moment(route.modified).local().format('M-D-YYYY h:mm a')}</small>
-                </p>
-              )}
+              <div className='mt-5'>
+                <PathReferences route={route} path={route.path} methods={route.methods} />
+              </div>
             </Fragment>
           )}
         </div>

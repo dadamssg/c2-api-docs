@@ -1,6 +1,6 @@
 {
   "name": "c2-api-docs",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Express API documenter",
   "main": "lib/index.js",
   "scripts": {
@@ -50,6 +50,7 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.0.4",
+    "lodash": "^4.17.10",
     "markdown": "^0.5.0",
     "moment": "^2.22.1",
     "node-sass": "^4.7.2",
@@ -62,6 +63,7 @@
     "react-hot-loader": "^4.2.0",
     "react-paginate": "^5.2.3",
     "react-router-dom": "^4.2.2",
+    "react-syntax-highlighter": "^7.0.4",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.2",
     "url-loader": "^0.6.2",

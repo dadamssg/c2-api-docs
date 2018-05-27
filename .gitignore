@@ -68,3 +68,5 @@ package-lock.json
 .idea
 src/grep.js
 src/test.js
+lib/grep.js
+lib/test.js

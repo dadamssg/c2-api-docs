@@ -1,4 +1,5 @@
 import pathToRegexp from 'path-to-regexp/index'
+import moment from 'moment/moment'
 
 export function getAvailableMethods (route) {
   return ['get', 'post', 'put', 'patch', 'delete'].filter(m => {
@@ -51,4 +52,8 @@ export function buildRouteSearchString (route) {
     })
     .join('/')
   return `${route.path} ${simplePath} ${route.title} ${route.description}`
+}
+
+export function displayDate (date) {
+  return date ? moment(date).local().format('M-D-YYYY h:mm a') : ''
 }

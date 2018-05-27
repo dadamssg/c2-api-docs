@@ -81,65 +81,36 @@ export default function (app, options) {
     })
   })
 
-  // find path info in project files
   app.get('/_path', (req, res) => {
     const path = req.query.path
     if (!path) {
       return res.status(400).json({error: 'No path query param.'})
     }
-
-    // find references in src files
+    const files = findPathInSrc(options, path)
+    const pattern = createSrcPathRegExp(path)
     const srcFiles = []
-    if (options.src) {
-      const parts = path.split('/')
-      let pattern = parts
-        .map((p, i) => {
-          if (p.includes(':')) return '[\\s\\S]*'
-          if ((i + 1) === parts.length) return `${p}*`
-          return p
+    files.forEach(test => {
+      const {file, lineNo} = test
+      const content = String(fs.readFileSync(file))
+      const lines = content.split('\n')
+      const line = lines[lineNo - 1] || ''
+      const result = pattern.exec(line)
+      if (result && result.length > 0) {
+        const startLine = lineNo - 2 <= 1 ? 1 : lineNo - 2
+        const linesCopy = [...lines]
+        srcFiles.push({
+          file,
+          lastModified: fs.statSync(file).mtime,
+          startLineNo: startLine,
+          lineNo,
+          lines: linesCopy.splice(startLine - 1, 5)
         })
-        .join('\\/')
-      pattern = `(${pattern})\\w+`
-      pattern = new RegExp(pattern)
-      glob.sync(`${options.src}/**/*.js`).forEach(file => {
-        const content = String(fs.readFileSync(file))
-        const lines = content.split('\n')
-        lines.forEach((line, i) => {
-          const result = pattern.exec(line)
-          if (result && result.length > 0) {
-            const lineNo = i + 1
-            const startLine = lineNo - 3 <= 1 ? 1 : lineNo
-            const linesCopy = [...lines]
-            srcFiles.push({
-              file,
-              lastModified: fs.statSync(file).mtime,
-              lineNo,
-              lines: linesCopy
-                .splice(startLine - 1, 5)
-                .map((line, x) => `${startLine + x}. ${line}`)
-            })
-          }
-        })
-      })
-    }
-
-    // find references in mock server files
-    const serverFiles = {}
-    if (options.server) {
-      glob.sync(`${options.server}/**/*.js`).forEach(file => {
-        const content = String(fs.readFileSync(file))
-        String(content).split('\n').forEach((line, i) => {
-          if (line.includes(path)) {
-            serverFiles[`${file}:${i + 1}`] = fs.statSync(file).mtime
-          }
-        })
-      })
-    }
-
+      }
+    })
     return res.json({
       path,
       src: srcFiles,
-      server: serverFiles
+      server: findPathInServer(options, path)
     })
   })
 
@@ -150,4 +121,106 @@ export default function (app, options) {
   app.get('*', function (req, res) {
     res.sendFile(path.resolve(__dirname, '..', 'api-explorer-dist', 'index.html'))
   })
+}
+
+/**
+ * Uses grep to find js/json files/lines with all non variable path parts in line
+ *
+ * @param options
+ * @param path
+ * @returns Array
+ */
+function findPathInSrc (options, path) {
+  // coalesce array of src dirs
+  const srcDirs = (Array.isArray(options.src) ? options.src : [options.src]).filter(s => !!s)
+  if (srcDirs.length === 0) {
+    return []
+  }
+  // get non variable path parts
+  const parts = path
+    .split('/')
+    .filter(p => {
+      return !!p && !p.includes(':')
+    })
+  // no parts to search
+  if (parts.length === 0) {
+    return []
+  }
+  const files = {}
+  srcDirs.forEach(dir => {
+    // build grep search
+    const [first, ...rest] = parts
+    const partsPattern = [`grep -rn --include=\\*.js --include=\\*.json '${first}' ${dir}`]
+    rest.forEach(p => partsPattern.push(`grep '${p}'`))
+    const search = partsPattern.join(' | ')
+    // execute, convert to array, filter blanks
+    let searchResult = ''
+    try {
+      searchResult = String(execSync(search))
+    } catch (e) {
+      searchResult = ''
+    }
+    searchResult.split('\n').filter(l => !!l).forEach(result => {
+      const firstColon = nthIndex(result, ':', 1)
+      const secondColon = nthIndex(result, ':', 2)
+      const file = result.substr(0, firstColon)
+      const lineNo = Number(result.substr(firstColon + 1, secondColon - (firstColon + 1)))
+      files[`${file}:${lineNo}`] = {file, lineNo}
+    })
+  })
+  // convert to array of objects
+  return Object.keys(files).sort().map(key => files[key])
+}
+
+function findPathInServer (options, path) {
+  // coalesce array of server dirs
+  const dirs = (Array.isArray(options.server) ? options.server : [options.server]).filter(s => !!s)
+  if (dirs.length === 0) {
+    return []
+  }
+  const files = {}
+  dirs.forEach(dir => {
+    let searchResult = ''
+    try {
+      searchResult = String(execSync(`grep -rn --include=\\*.js --include=\\*.json '${path}' ${dir}`))
+    } catch (e) {
+      searchResult = ''
+    }
+    searchResult.split('\n').filter(l => !!l).forEach(result => {
+      const firstColon = nthIndex(result, ':', 1)
+      const secondColon = nthIndex(result, ':', 2)
+      const file = result.substr(0, firstColon)
+      const lineNo = Number(result.substr(firstColon + 1, secondColon - (firstColon + 1)))
+      files[`${file}:${lineNo}`] = {
+        file,
+        lineNo,
+        lastModified: fs.statSync(file).mtime
+      }
+    })
+  })
+  // convert to array of objects
+  return Object.keys(files).sort().map(key => files[key])
+}
+
+function createSrcPathRegExp (path) {
+  const parts = path.split('/')
+  let pattern = parts
+    .map((p, i) => {
+      if (p.includes(':')) return '[\\s\\S]*'
+      if ((i + 1) === parts.length) return `${p}*`
+      return p
+    })
+    .join('\\/')
+  pattern = `(${pattern})\\w+`
+  return new RegExp(pattern)
+}
+
+function nthIndex (str, pat, n) {
+  const L = str.length
+  let i = -1
+  while (n-- && i++ < L) {
+    i = str.indexOf(pat, i)
+    if (i < 0) break
+  }
+  return i
 }
