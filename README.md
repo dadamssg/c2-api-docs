@@ -130,8 +130,12 @@ The equivalent json file of the above would look like below and behave identical
 #### path
 This must be a valid express route path.
 
+#### method
+A single http verb that this endpoint responds to. Ex. `POST`
+
 #### methods
-This must be an array of http verbs that this endpoint responds to. Ex. `['GET', 'POST', 'PUT', 'PATCH', 'DELETE']`
+Routes can respond to multiple http methods. This must be an array of http verbs that this endpoint responds to.
+Ex. `['GET', 'POST', 'PUT', 'PATCH', 'DELETE']`
 
 #### title
 Only used for documentation in the api explorer ui.
