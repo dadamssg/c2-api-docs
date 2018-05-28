@@ -87,9 +87,9 @@ export default function (app, options) {
       return res.status(400).json({error: 'No path query param.'})
     }
     const serverDirs = dirsToArray(options.server)
-    const files = findPathInSrc(options, path).filter(file => {
+    const files = findPathInSrc(options, path).filter(test => {
       // filter out any server files
-      return !serverDirs.some(dir => file.includes(dir))
+      return !serverDirs.some(dir => test.file.includes(dir))
     })
     const pattern = createSrcPathRegExp(path)
     let srcFiles = []
