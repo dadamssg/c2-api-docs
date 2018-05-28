@@ -287,9 +287,11 @@ to not be interpreted as a route file. Example:
 server/
   routes/
     people/
-      _people.json    # will not be interpreted as a route file
-      get-people.json # will be interpreted as a route file
-      save-person.js  # will be interpreted as a route file
+      get-people/
+        _people.json     # will not be interpreted as a route file
+        route.js         # will be interpreted as a route file
+      save-person.js     # will be interpreted as a route file
+      update-person.json # will be interpreted as a route file
 ```
 
 ## Search
