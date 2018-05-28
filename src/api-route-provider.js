@@ -10,6 +10,8 @@ export default function (app, options) {
   if (options.routes) {
     // find all route files
     glob.sync(`${options.routes}/**/*.+(js|json)`).forEach(file => {
+      // ignore files that start with _ as a means to allow for fixture files
+      if (path.basename(file).substr(0, 1) === '_') return
       const filename = file
       const required = require(filename)
       const route = required.default || required
@@ -17,10 +19,6 @@ export default function (app, options) {
       const methods = route.method ? [route.method] : route.methods
       route.methods = methods.map(method => method.toLowerCase())
       route.lastModified = fs.statSync(filename).mtime
-      route.pathUsage = ''
-      try {
-        route.pathUsage = options.src ? execSync(`grep -rn '${route.path}' ${options.src}`).toString() : ''
-      } catch (e) {}
       fileRoutes.push(route)
       // create express route
       const appRoute = app.route(route.path)
