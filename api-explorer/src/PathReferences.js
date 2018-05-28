@@ -41,14 +41,15 @@ export default class PathReferences extends PureComponent {
     const {route} = this.props
     const srcFiles = this.state.src || []
     const serverFiles = this.state.server || []
+    const uid = route.id.replace(/[^a-z0-9]/gi, '')
     return (
       <div>
         {srcFiles.length > 0 && (
           <div className='accordion' id='accordion'>
             {srcFiles.map((file, i) => (
               <SourceReference
-                key={`src-${i}`}
-                id={`src-${i}`}
+                key={`${uid}-${i}`}
+                id={`${uid}-${i}`}
                 reference={file}
               />
             ))}

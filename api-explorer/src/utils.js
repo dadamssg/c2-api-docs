@@ -1,6 +1,19 @@
 import pathToRegexp from 'path-to-regexp/index'
 import moment from 'moment/moment'
 
+export function normalizeParams (params = {}) {
+  const newParams = {}
+  Object.keys(params).forEach(key => {
+    const isObject = typeof params[key] === 'object'
+    newParams[key] = {
+      name: key,
+      value: isObject ? params[key].value : (params[key] || ''),
+      help: isObject ? params[key].help : ''
+    }
+  })
+  return newParams
+}
+
 export function getAvailableMethods (route) {
   return ['get', 'post', 'put', 'patch', 'delete'].filter(m => {
     return Object.keys(route.methods).includes(m)

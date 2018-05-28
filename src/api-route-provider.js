@@ -59,8 +59,10 @@ export default function (app, options) {
           }).length
           return methodMatch && route.path === r.path
         }) || {}
-
+        const methods = Object.keys(r.methods).join('-')
+        const id = Buffer.from(`${methods}-${r.path}`).toString('base64')
         return {
+          id,
           path: r.path,
           methods: r.methods,
           title: routeFile.title,
@@ -100,14 +102,14 @@ export default function (app, options) {
       const line = lines[lineNo - 1] || ''
       const result = pattern.exec(line)
       if (result && result.length > 0) {
-        const startLine = lineNo - 2 <= 1 ? 1 : lineNo - 2
+        const startLine = lineNo - 4 <= 1 ? 1 : lineNo - 4 // start 4 lines back
         const linesCopy = [...lines]
         srcFiles.push({
           file,
           lastModified: fs.statSync(file).mtime,
           startLineNo: startLine,
           lineNo,
-          lines: linesCopy.splice(startLine - 1, 5)
+          lines: linesCopy.splice(startLine - 1, 10) // show 10 lines total
         })
       }
     })

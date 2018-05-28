@@ -5,22 +5,9 @@ import axios from 'axios'
 import Explorer from './Explorer'
 import config from './config'
 import RoutePage from './RoutePage'
-import {buildRouteSearchString} from './utils'
+import {buildRouteSearchString, normalizeParams} from './utils'
 
 const defaultTitle = 'API Docs'
-
-export function normalizeParams (params = {}) {
-  const newParams = {}
-  Object.keys(params).forEach(key => {
-    const isObject = typeof params[key] === 'object'
-    newParams[key] = {
-      name: key,
-      value: isObject ? params[key].value : (params[key] || ''),
-      help: isObject ? params[key].help : ''
-    }
-  })
-  return newParams
-}
 
 class App extends Component {
   state = {
@@ -32,10 +19,8 @@ class App extends Component {
         document.title = res.data.title
       }
       const routes = res.data.routes.map(r => {
-        const id = window.btoa(`${r.path}-${Object.keys(r.methods).join('-')}`)
         return {
           ...r,
-          id,
           params: normalizeParams(r.params),
           query: normalizeParams(r.query),
           search: buildRouteSearchString(r)
