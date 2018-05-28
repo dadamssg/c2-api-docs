@@ -24,7 +24,7 @@ class Explorer extends PureComponent {
   }
   render () {
     const queryParams = new URLSearchParams(this.props.location.search)
-    const search = queryParams.get('q') || ''
+    const search = (queryParams.get('q') || '').toLowerCase()
     const page = Number(queryParams.get('page')) || 0
     let routes = this.props.routes.filter(route => {
       return route.search.includes(search)

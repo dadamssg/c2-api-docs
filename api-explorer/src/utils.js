@@ -64,7 +64,7 @@ export function buildRouteSearchString (route) {
       return p.includes(':') ? ':' : p
     })
     .join('/')
-  return `${route.path} ${simplePath} ${route.title} ${route.description}`
+  return `${route.path} ${simplePath} ${route.title} ${route.description}`.toLowerCase()
 }
 
 export function displayDate (date) {

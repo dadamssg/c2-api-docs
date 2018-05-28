@@ -18,7 +18,7 @@ export default function (app, options) {
       route.filename = filename
       const methods = route.method ? [route.method] : route.methods
       route.methods = methods.map(method => method.toLowerCase())
-      route.lastModified = fs.statSync(filename).mtime
+      route.lastModified = getLastModified(filename)
       fileRoutes.push(route)
       // create express route
       const appRoute = app.route(route.path)
@@ -69,8 +69,7 @@ export default function (app, options) {
           params: routeFile.params,
           filename: routeFile.filename,
           modified: routeFile.lastModified,
-          payload: routeFile.payload,
-          pathUsage: routeFile.pathUsage
+          payload: routeFile.payload
         }
       })
       .filter(r => !['/_api', '/_docs', '/_path', '*'].includes(r.path))
@@ -105,7 +104,7 @@ export default function (app, options) {
         const linesCopy = [...lines]
         srcFiles.push({
           file,
-          lastModified: fs.statSync(file).mtime,
+          lastModified: getLastModified(file),
           startLineNo: startLine,
           lineNo,
           lines: linesCopy.splice(startLine - 1, 10) // show 10 lines total
@@ -127,6 +126,14 @@ export default function (app, options) {
   app.get('*', function (req, res) {
     res.sendFile(path.resolve(__dirname, '..', 'api-explorer-dist', 'index.html'))
   })
+}
+
+function getLastModified (file) {
+  try {
+    return String(execSync(`git log -1 --date=iso --format=%cd ${file}`))
+  } catch (e) {
+    return fs.statSync(file).mtime
+  }
 }
 
 function dirsToArray (dirs) {
@@ -204,7 +211,7 @@ function findPathInServer (options, path) {
       files[`${file}:${lineNo}`] = {
         file,
         lineNo,
-        lastModified: fs.statSync(file).mtime
+        lastModified: getLastModified(file)
       }
     })
   })
