@@ -35,7 +35,7 @@ class App extends Component {
   render () {
     return (
       <Router basename={config.env === 'production' ? '/_docs/' : undefined}>
-        <div className={'container mt-5'}>
+        <div className={'container mt-5'} style={{marginBottom: '5rem!important'}}>
           <Link id='app-title' to={'/'}><h1>{this.state.title || defaultTitle}</h1></Link>
           <Route
             exact
