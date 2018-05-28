@@ -5,7 +5,7 @@ import glob from 'glob'
 import childProcess from 'child_process'
 const {execSync} = childProcess
 
-export default function (app, options) {
+export default function (app, options = {}) {
   const fileRoutes = []
   if (options.routes) {
     // find all route files
