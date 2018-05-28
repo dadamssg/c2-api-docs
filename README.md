@@ -155,7 +155,7 @@ export default {
 }
 ```
 
-The above prepopulate this params input in the api explorer. You can provide additional help text by using an object.
+The above will prepopulate this param's input in the api explorer. You can provide additional help text by using an object.
 ```js
 export default {
   path: '/companies/:companyUnid/employees',
