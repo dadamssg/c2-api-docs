@@ -22,7 +22,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import path from 'path'
 import cors from 'cors'
-import document from 'c2-api-docs'
+import documentAPI from 'c2-api-docs'
 
 const app = express()
 app.use(cors())
@@ -30,9 +30,15 @@ app.use(bodyParser.json())
 
 // routes added here
 
-document(app, {
+documentAPI(app, {
+  title: 'IOP API Docs',
   routes: path.resolve(__dirname, 'routes'),
-  title: 'IOP API Docs'
+  src: path.resolve(__dirname, '..', 'src'),
+  server: [
+    path.resolve(__dirname),
+    path.resolve(__dirname, '..', 'src', 'redux', 'server')
+  ],
+  hidePath: path.resolve(__dirname, '..')
 })
 
 const PORT = process.env.PORT || 5033
@@ -43,6 +49,24 @@ app.listen(PORT, () => {
 ```
 
 After starting your mock server, you will have an api explorer at `http://localhost:<port>/_docs`.
+
+## Configuration
+The second argument to the `documentAPI` function is a configuration object. All are optional.
+
+#### `title`
+Turns into the header of the api explorer.
+
+#### `routes`
+The directory to the route files. See route file documentation below.
+
+#### `src`
+The source code path. Can be a single path or array of paths.
+
+#### `server`
+The mock server path. Can be a single path or jarray of paths.
+
+#### `hidePath`
+Removes this path from the file names only in the api explorer.
 
 ## Route files
 This package gives you a new way to define mock endpoints through route files. Route files can be nested in the `routes` directory. Example:
@@ -59,7 +83,7 @@ server/
 The files will automatically get incorporated into the mock server.
 
 ### Structure
-Route files must export a javascript object. See this example route file.
+Route files can either be a `.js` file that exports an object or a `.json` file. See this example route file.
 ```js
 // server/routes/companies/employees.js
 
@@ -80,6 +104,27 @@ export default {
   }
 }
 
+```
+
+The equivalent json file of the above would look like below and behave identically.
+
+```json
+{
+  "path": ""/companies/:companyUnid/employees",
+  "methods": ["GET"],
+  "title": "Company employees",
+  "description": "Fetches all active employees",
+  "response": {
+    "employees": [
+      {
+        "name": "John Doe"
+      },
+      {
+        "name": "Bob Smith"
+      }
+    ]
+  }
+}
 ```
 
 #### path
@@ -228,4 +273,17 @@ export default {
     return res.status(200).json(require('../fixtures/people.json'))
   }
 }
+```
+
+## Fixtures
+Fixture files can be nested in the `routes` directory but their file names must be prefixed with an underscore
+to not be interpreted as a route file. Example:
+
+```sh
+server/
+  routes/
+    people/
+      _people.json    # will not be interpreted as a route file
+      get-people.json # will be interpreted as a route file
+      save-person.js  # will be interpreted as a route file
 ```

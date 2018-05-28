@@ -68,5 +68,5 @@ export function buildRouteSearchString (route) {
 }
 
 export function displayDate (date) {
-  return date ? moment(date).local().format('M-D-YYYY h:mm a') : ''
+  return date ? moment(date).local().format('ddd, MMM Do YYYY, h:mm a') : ''
 }
