@@ -37,8 +37,15 @@ class App extends Component {
       <Router basename={config.env === 'production' ? '/_docs/' : undefined}>
         <div className={'container mt-5'}>
           <Link id='app-title' to={'/'}><h1>{this.state.title || defaultTitle}</h1></Link>
-          <Route exact path='/' render={() => <Explorer routes={this.state.routes} />} />
-          <Route path='/request/:id' component={() => <RoutePage routes={this.state.routes} />} />
+          <Route
+            exact
+            path='/'
+            render={() => <Explorer routes={this.state.routes} hidePath={this.state.hidePath} />}
+          />
+          <Route
+            path='/request/:id'
+            component={() => <RoutePage routes={this.state.routes} hidePath={this.state.hidePath} />}
+          />
         </div>
       </Router>
     )

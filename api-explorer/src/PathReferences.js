@@ -1,16 +1,14 @@
 import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import _ from 'lodash'
 import config from './config'
 import SourceReference from './SourceReference'
 import ServerReference from './ServerReference'
 
 export default class PathReferences extends PureComponent {
   static propTypes = {
-    path: PropTypes.string.isRequired,
-    methods: PropTypes.object,
-    route: PropTypes.object
+    route: PropTypes.object.isRequired,
+    hidePath: PropTypes.string
   }
   state = {
     src: [],
@@ -38,7 +36,7 @@ export default class PathReferences extends PureComponent {
       .catch(() => {})
   }
   render () {
-    const {route} = this.props
+    const {route, hidePath} = this.props
     const srcFiles = this.state.src || []
     const serverFiles = this.state.server || []
     const uid = route.id.replace(/[^a-z0-9]/gi, '')
@@ -51,13 +49,18 @@ export default class PathReferences extends PureComponent {
                 key={`${uid}-${i}`}
                 id={`${uid}-${i}`}
                 reference={file}
+                hidePath={hidePath}
               />
             ))}
           </div>
         )}
         {route.filename && (
           <div className='mt-3'>
-            <ServerReference file={route.filename} modified={route.modified} />
+            <ServerReference
+              file={route.filename}
+              modified={route.modified}
+              hidePath={hidePath}
+            />
           </div>
         )}
         {!route.filename && serverFiles.length > 0 && (
@@ -67,6 +70,7 @@ export default class PathReferences extends PureComponent {
                 key={i}
                 file={`${file.file}:${file.lineNo}`}
                 modified={file.lastModified}
+                hidePath={hidePath}
               />
             ))}
           </div>

@@ -11,7 +11,8 @@ import PathReferences from './PathReferences'
 class Route extends Component {
   static propTypes = {
     route: PropTypes.object,
-    location: PropTypes.object
+    location: PropTypes.object,
+    hidePath: PropTypes.string
   }
   state = {
     expanded: false
@@ -83,7 +84,10 @@ class Route extends Component {
                 />
               )}
               <div className='mt-5'>
-                <PathReferences route={route} path={route.path} methods={route.methods} />
+                <PathReferences
+                  route={route}
+                  hidePath={this.props.hidePath}
+                />
               </div>
             </Fragment>
           )}

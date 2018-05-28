@@ -8,7 +8,8 @@ class Explorer extends PureComponent {
   static propTypes = {
     location: PropTypes.object,
     history: PropTypes.object,
-    routes: PropTypes.array
+    routes: PropTypes.array,
+    hidePath: PropTypes.string
   }
   redirect = (values = {}) => {
     const queryParams = new URLSearchParams(this.props.location.search)
@@ -68,7 +69,7 @@ class Explorer extends PureComponent {
         </div>
         {routes.map((route, i) => (
           <div key={i} className={'mb-2'}>
-            <Route key={i} route={route} />
+            <Route key={i} route={route} hidePath={this.props.hidePath} />
           </div>
         ))}
         <div className='text-center' id='react-paginate'>

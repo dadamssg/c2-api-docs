@@ -24,7 +24,8 @@ document(app, {
   routes: path.resolve(__dirname, 'routes'),
   src: path.resolve(__dirname, '..', 'test-src'),
   server: path.resolve(__dirname, '..', 'test-api'),
-  title: 'Example API Docs'
+  title: 'Example API Docs',
+  hidePath: path.resolve(__dirname, '..')
 })
 
 const PORT = process.env.PORT || 5033

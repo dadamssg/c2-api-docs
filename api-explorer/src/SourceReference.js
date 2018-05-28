@@ -10,10 +10,11 @@ registerLanguage('jsx', jsx)
 export default class SourceReference extends PureComponent {
   static propTypes = {
     id: PropTypes.string,
-    reference: PropTypes.object
+    reference: PropTypes.object,
+    hidePath: PropTypes.string
   }
   render () {
-    const {id, reference} = this.props
+    const {id, reference, hidePath} = this.props
     if (!reference) return null
     const headingId = `heading-${id}`
     const collapseId = `collapse-${id}`
@@ -32,12 +33,12 @@ export default class SourceReference extends PureComponent {
               data-toggle='collapse'
               data-target={`#${collapseId}`}
               aria-controls={collapseId}>
-              {reference.file}:{reference.lineNo}
+              {reference.file.replace(hidePath, '')}:{reference.lineNo}
             </button>
           </span>
         </div>
 
-        <div id={collapseId} className='collapse' aria-labelledby={headingId} data-parent='#accordion'>
+        <div id={collapseId} className='collapse' aria-labelledby={headingId}>
           <div className='card-body'>
             <SyntaxHighlighter
               language='jsx'

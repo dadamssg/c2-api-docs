@@ -77,7 +77,8 @@ export default function (app, options) {
 
     return res.json({
       routes: cleaned,
-      title: options.title
+      title: options.title,
+      hidePath: options.hidePath
     })
   })
 
