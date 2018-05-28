@@ -82,10 +82,16 @@ export default function (app, options) {
   })
 
   app.get('/_path', (req, res) => {
-    const path = req.query.path
+    const {path} = req.query
     if (!path) {
       return res.status(400).json({error: 'No path query param.'})
     }
+    // determine how many lines of code to show
+    let showLines = Number(req.query.lines)
+    if (isNaN(showLines) || showLines < 10) {
+      showLines = 10
+    }
+    const halfLines = Math.ceil(showLines / 2) - 1
     const serverDirs = dirsToArray(options.server)
     const files = findPathInSrc(options, path).filter(test => {
       // filter out any server files
@@ -100,14 +106,14 @@ export default function (app, options) {
       const line = lines[lineNo - 1] || ''
       const result = pattern.exec(line)
       if (result && result.length > 0) {
-        const startLine = lineNo - 4 <= 1 ? 1 : lineNo - 4 // start 4 lines back
+        const startLine = lineNo - halfLines <= 1 ? 1 : lineNo - halfLines // start halfLines lines back
         const linesCopy = [...lines]
         srcFiles.push({
           file,
           lastModified: getLastModified(file),
           startLineNo: startLine,
           lineNo,
-          lines: linesCopy.splice(startLine - 1, 10) // show 10 lines total
+          lines: linesCopy.splice(startLine - 1, showLines)
         })
       }
     })
@@ -130,7 +136,7 @@ export default function (app, options) {
 
 function getLastModified (file) {
   try {
-    return String(execSync(`git log -1 --date=iso --format=%cd ${file}`))
+    return String(execSync(`git log -1 --date=iso --format=%cD ${file}`)).trim()
   } catch (e) {
     return fs.statSync(file).mtime
   }

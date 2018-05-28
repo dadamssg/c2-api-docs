@@ -1,14 +1,16 @@
 import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
+import {withRouter} from 'react-router-dom'
 import axios from 'axios'
 import config from './config'
 import SourceReference from './SourceReference'
 import ServerReference from './ServerReference'
 
-export default class PathReferences extends PureComponent {
+class PathReferences extends PureComponent {
   static propTypes = {
     route: PropTypes.object.isRequired,
-    hidePath: PropTypes.string
+    hidePath: PropTypes.string,
+    location: PropTypes.object
   }
   state = {
     src: [],
@@ -24,9 +26,9 @@ export default class PathReferences extends PureComponent {
     }
   }
   fetchData = () => {
-    const path = encodeURIComponent(this.props.route.path)
-    const methods = encodeURIComponent(Object.keys(this.props.route.methods))
-    axios.get(`${config.api}/_path?path=${path}&methods=${methods}`).then(res => {
+    const queryParams = new URLSearchParams(this.props.location.search)
+    queryParams.set('path', this.props.route.path)
+    axios.get(`${config.api}/_path?${queryParams.toString()}`).then(res => {
       this.setState({
         loading: false,
         src: res.data.src || [],
@@ -79,3 +81,5 @@ export default class PathReferences extends PureComponent {
     )
   }
 }
+
+export default withRouter(PathReferences)
