@@ -63,10 +63,10 @@ The directory to the route files. See route file documentation below.
 The source code path. Can be a single path or array of paths.
 
 #### `server`
-The mock server path. Can be a single path or jarray of paths.
+The mock server path. Can be a single path or array of paths.
 
 #### `hidePath`
-Removes this path from the file names only in the api explorer.
+Removes the path from the file names in the api explorer.
 
 ## Route files
 This package gives you a new way to define mock endpoints through route files. Route files can be nested in the `routes` directory. Example:
@@ -110,7 +110,7 @@ The equivalent json file of the above would look like below and behave identical
 
 ```json
 {
-  "path": ""/companies/:companyUnid/employees",
+  "path": "/companies/:companyUnid/employees",
   "methods": ["GET"],
   "title": "Company employees",
   "description": "Fetches all active employees",
