@@ -137,7 +137,7 @@ This must be an array of http verbs that this endpoint responds to. Ex. `['GET',
 Only used for documentation in the api explorer ui.
 
 #### description
-Only used for documentation in the api explorer ui.
+Only used for documentation in the api explorer ui. Supports markdown syntax.
 
 #### url params
 URL params are the tokens prefixed by `:` in the path. These params can be further defined:
@@ -151,7 +151,7 @@ export default {
 }
 ```
 
-This will prepopulate this params input in the api explorer. You can provide additional help text by using an object.
+The above prepopulate this params input in the api explorer. You can provide additional help text by using an object.
 ```js
 export default {
   path: '/companies/:companyUnid/employees',
@@ -286,4 +286,18 @@ server/
       _people.json    # will not be interpreted as a route file
       get-people.json # will be interpreted as a route file
       save-person.js  # will be interpreted as a route file
+```
+
+## Search
+Searching in the frontend is case-insensitive. You can also omit path variables and simply provide a colon. Example:
+
+```
+/companies/:/employees/:/address
+```
+
+The above would match:
+
+
+```
+/companies/:companyUnid/employees/:unid/address
 ```
