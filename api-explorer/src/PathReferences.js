@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
+import Spinner from 'react-spinkit'
 import config from './config'
 import SourceReference from './SourceReference'
 import ServerReference from './ServerReference'
@@ -26,6 +27,7 @@ class PathReferences extends PureComponent {
     }
   }
   fetchData = () => {
+    this.setState({loading: true})
     const queryParams = new URLSearchParams(this.props.location.search)
     queryParams.set('path', this.props.route.path)
     axios.get(`${config.api}/_path?${queryParams.toString()}`).then(res => {
@@ -38,6 +40,11 @@ class PathReferences extends PureComponent {
       .catch(() => {})
   }
   render () {
+    if (this.state.loading) {
+      return (
+        <Spinner name='line-scale-pulse-out' fadeIn='quarter' />
+      )
+    }
     const {route, hidePath} = this.props
     const srcFiles = this.state.src || []
     const serverFiles = this.state.server || []
