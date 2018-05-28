@@ -1,5 +1,6 @@
 module.exports = {
   path: '/people/:id',
+  description: '[Google](http://google.com)',
   params: {
     id: {
       value: 'abc',
@@ -13,7 +14,6 @@ module.exports = {
   },
   methods: ['post', 'put', 'get'],
   title: 'Get all people',
-  description: 'This is an endpoint to fetch all people',
   payload: {
     data: {
       blah: 'blah blah'

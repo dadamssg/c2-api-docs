@@ -58,7 +58,7 @@ export default class PathReferences extends PureComponent {
           <div className='mt-3'>
             <ServerReference
               file={route.filename}
-              modified={route.modified}
+              modified={route.lastModified}
               hidePath={hidePath}
             />
           </div>

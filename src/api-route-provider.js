@@ -68,7 +68,7 @@ export default function (app, options) {
           query: routeFile.query,
           params: routeFile.params,
           filename: routeFile.filename,
-          modified: routeFile.lastModified,
+          lastModified: routeFile.lastModified,
           payload: routeFile.payload
         }
       })
