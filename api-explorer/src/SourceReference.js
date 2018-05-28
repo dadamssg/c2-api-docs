@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
 import SyntaxHighlighter, {registerLanguage} from 'react-syntax-highlighter/prism-light'
 import jsx from 'react-syntax-highlighter/languages/prism/jsx'
-import prism from 'react-syntax-highlighter/styles/prism/prism'
+import prism from 'react-syntax-highlighter/styles/prism/coy'
 import {displayDate} from './utils'
 
 registerLanguage('jsx', jsx)
@@ -39,7 +39,7 @@ export default class SourceReference extends PureComponent {
         </div>
 
         <div id={collapseId} className='collapse' aria-labelledby={headingId}>
-          <div className='card-body'>
+          <div className='card-body' style={{overflowX: 'scroll'}}>
             <SyntaxHighlighter
               language='jsx'
               style={prism}
