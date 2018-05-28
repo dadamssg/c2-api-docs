@@ -80,7 +80,7 @@ server/
       save-company.js
   server.js
 ```
-The files will automatically get incorporated into the mock server.
+The files will automatically get incorporated into the mock server as functional endpoints.
 
 ### Structure
 Route files can either be a `.js` file that exports an object or a `.json` file. See this example route file.
@@ -289,7 +289,7 @@ server/
 ```
 
 ## Search
-Searching in the frontend is case-insensitive. You can also omit path variables and simply provide a colon. Example:
+Searching in the frontend is case-insensitive. You can omit path variables and simply provide a colon. Example:
 
 ```
 /companies/:/employees/:/address
