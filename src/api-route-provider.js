@@ -86,9 +86,13 @@ export default function (app, options) {
     if (!path) {
       return res.status(400).json({error: 'No path query param.'})
     }
-    const files = findPathInSrc(options, path)
+    const serverDirs = dirsToArray(options.server)
+    const files = findPathInSrc(options, path).filter(file => {
+      // filter out any server files
+      return !serverDirs.some(dir => file.includes(dir))
+    })
     const pattern = createSrcPathRegExp(path)
-    const srcFiles = []
+    let srcFiles = []
     files.forEach(test => {
       const {file, lineNo} = test
       const content = String(fs.readFileSync(file))
@@ -107,6 +111,7 @@ export default function (app, options) {
         })
       }
     })
+
     return res.json({
       path,
       src: srcFiles,
@@ -123,6 +128,10 @@ export default function (app, options) {
   })
 }
 
+function dirsToArray (dirs) {
+  return (Array.isArray(dirs) ? dirs : [dirs]).filter(d => !!d)
+}
+
 /**
  * Uses grep to find js/json files/lines with all non variable path parts in line
  *
@@ -132,7 +141,7 @@ export default function (app, options) {
  */
 function findPathInSrc (options, path) {
   // coalesce array of src dirs
-  const srcDirs = (Array.isArray(options.src) ? options.src : [options.src]).filter(s => !!s)
+  const srcDirs = dirsToArray(options.src)
   if (srcDirs.length === 0) {
     return []
   }
@@ -174,7 +183,7 @@ function findPathInSrc (options, path) {
 
 function findPathInServer (options, path) {
   // coalesce array of server dirs
-  const dirs = (Array.isArray(options.server) ? options.server : [options.server]).filter(s => !!s)
+  const dirs = dirsToArray(options.server)
   if (dirs.length === 0) {
     return []
   }
