@@ -127,23 +127,23 @@ The equivalent json file of the above would look like below and behave identical
 }
 ```
 
-#### path
+#### `path`
 This must be a valid express route path.
 
-#### method
+#### `method`
 A single http verb that this endpoint responds to. Ex. `POST`
 
-#### methods
+#### `methods`
 Routes can respond to multiple http methods. This must be an array of http verbs that this endpoint responds to.
 Ex. `['GET', 'POST', 'PUT', 'PATCH', 'DELETE']`
 
-#### title
+#### `title`
 Only used for documentation in the api explorer ui.
 
-#### description
+#### `description`
 Only used for documentation in the api explorer ui. Supports markdown syntax.
 
-#### url params
+#### `params`
 URL params are the tokens prefixed by `:` in the path. These params can be further defined:
 ```js
 export default {
@@ -170,7 +170,7 @@ export default {
 ```
 The `help` text will show up directly beneath the param's input in the api explorer.
 
-#### query params
+#### `query`
 Query params can be defined in the same way.
 ```js
 export default {
