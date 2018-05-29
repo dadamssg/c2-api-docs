@@ -6,7 +6,8 @@ export default class Search extends PureComponent {
     placeholder: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    disabled: PropTypes.bool
   }
   static defaultProps = {
     placeholder: 'Search',
@@ -22,7 +23,8 @@ export default class Search extends PureComponent {
       value,
       onChange,
       onSubmit,
-      placeholder
+      placeholder,
+      disabled
     } = this.props
     return (
       <form onSubmit={this.onSubmit}>
@@ -39,6 +41,7 @@ export default class Search extends PureComponent {
               className='btn btn-secondary'
               type='submit'
               onClick={onSubmit}
+              disabled={disabled}
             >
               <span className='oi oi-magnifying-glass' />
             </button>

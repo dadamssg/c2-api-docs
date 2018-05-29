@@ -16,9 +16,12 @@ export default class Grep extends PureComponent {
     files: [],
     searched: false
   }
-  onSubmit = () => {
+  isDisabled = () => {
     const {search, loading} = this.state
-    if (search.length === 0 || loading) return
+    return search.length < 3 || loading
+  }
+  onSubmit = () => {
+    if (this.isDisabled()) return
     this.setState({loading: true, error: null, files: []})
     const q = encodeURIComponent(this.state.search)
     axios.get(`${config.api}/_grep?q=${q}`).then(res => {
@@ -43,6 +46,7 @@ export default class Grep extends PureComponent {
             placeholder='grep'
             onChange={(e) => this.setState({search: e.target.value})}
             onSubmit={this.onSubmit}
+            disabled={this.isDisabled()}
           />
         </div>
         {loading && (
