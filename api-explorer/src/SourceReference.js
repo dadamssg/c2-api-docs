@@ -13,6 +13,14 @@ export default class SourceReference extends PureComponent {
     reference: PropTypes.object,
     hidePath: PropTypes.string
   }
+  state = {
+    showCode: false
+  }
+  componentDidMount () {
+    const {id} = this.props
+    window.$(`#collapse-${id}`).on('show.bs.collapse', () => this.setState({showCode: true}))
+    window.$(`#collapse-${id}`).on('hidden.bs.collapse', () => this.setState({showCode: false}))
+  }
   render () {
     const {id, reference, hidePath} = this.props
     if (!reference) return null
@@ -43,15 +51,17 @@ export default class SourceReference extends PureComponent {
 
         <div id={collapseId} className='collapse' aria-labelledby={headingId}>
           <div className='card-body border-bottom' style={{overflowX: 'scroll'}}>
-            <SyntaxHighlighter
-              language='jsx'
-              style={prism}
-              showLineNumbers
-              startingLineNumber={reference.startLineNo}
-              lineNumberStyle={no => ({color: lineNumbers.includes(no) ? '#007bff' : '#c8c8c8'})}
-            >
-              {reference.lines.join('\n')}
-            </SyntaxHighlighter>
+            {this.state.showCode && (
+              <SyntaxHighlighter
+                language='jsx'
+                style={prism}
+                showLineNumbers
+                startingLineNumber={reference.startLineNo}
+                lineNumberStyle={no => ({color: lineNumbers.includes(no) ? '#007bff' : '#c8c8c8'})}
+              >
+                {reference.lines.join('\n')}
+              </SyntaxHighlighter>
+            )}
           </div>
         </div>
       </div>
