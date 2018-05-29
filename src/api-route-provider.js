@@ -95,6 +95,7 @@ export default function (app, options = {}) {
     }
     const halfLines = Math.ceil(showLines / 2) - 1
     if (q.includes('"') && q.includes("'")) {
+      // limitation of grep
       return res.status({error: 'Searches cannot include both single and double quotes.'})
     }
     const escChar = q.includes("'") ? '"' : "'"
@@ -213,7 +214,8 @@ export default function (app, options = {}) {
 
 function getLastModified (file) {
   try {
-    return String(execSync(`git log -1 --date=iso --format=%cD ${file}`)).trim()
+    const dir = path.dirname(file)
+    return String(execSync(`cd ${dir} && git log -1 --date=iso --format=%cD ${file}`)).trim()
   } catch (e) {
     return fs.statSync(file).mtime
   }

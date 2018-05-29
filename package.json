@@ -1,13 +1,13 @@
 {
   "name": "c2-api-docs",
-  "version": "0.0.54",
+  "version": "0.0.55",
   "description": "Express API documenter",
   "main": "lib/index.js",
   "scripts": {
     "start": "concurrently -k -p \"[{name}]\" -n \"Server,React\" \"npm run server\" \"npm run react\"",
     "react": "cd api-explorer && cross-env NODE_ENV=development webpack-dev-server -d --hot",
     "server": "cross-env nodemon test-api/server.js --watch src --watch test-api --exec babel-node",
-    "build": "node_modules/.bin/babel -d lib/ src/",
+    "build-backend": "node_modules/.bin/babel -d lib/ src/",
     "build-frontend": "cd api-explorer && cross=env NODE_ENV=production webpack --mode production",
     "babel-node": "babel-node"
   },
