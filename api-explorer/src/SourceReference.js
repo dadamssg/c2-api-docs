@@ -18,6 +18,7 @@ export default class SourceReference extends PureComponent {
     if (!reference) return null
     const headingId = `heading-${id}`
     const collapseId = `collapse-${id}`
+    const lineNumbers = typeof reference.lineNo === 'number' ? [reference.lineNo] : reference.lineNos
     return (
       <div className='card'>
         <div
@@ -33,19 +34,19 @@ export default class SourceReference extends PureComponent {
               data-toggle='collapse'
               data-target={`#${collapseId}`}
               aria-controls={collapseId}>
-              {reference.file.replace(hidePath, '')}:{reference.lineNo}
+              {reference.file.replace(hidePath, '')}:{lineNumbers.join(',')}
             </button>
           </span>
         </div>
 
         <div id={collapseId} className='collapse' aria-labelledby={headingId}>
-          <div className='card-body' style={{overflowX: 'scroll'}}>
+          <div className='card-body border-bottom' style={{overflowX: 'scroll'}}>
             <SyntaxHighlighter
               language='jsx'
               style={prism}
               showLineNumbers
               startingLineNumber={reference.startLineNo}
-              lineNumberStyle={no => ({color: reference.lineNo === no ? '#007bff' : '#c8c8c8'})}
+              lineNumberStyle={no => ({color: lineNumbers.includes(no) ? '#007bff' : '#c8c8c8'})}
             >
               {reference.lines.join('\n')}
             </SyntaxHighlighter>

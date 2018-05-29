@@ -7,6 +7,7 @@ import config from './config'
 import RoutePage from './RoutePage'
 import {buildRouteSearchString, normalizeParams} from './utils'
 import Markdown from './Markdown'
+import Grep from './Grep'
 
 const defaultTitle = 'API Docs'
 
@@ -49,10 +50,19 @@ class App extends Component {
               </Link>
             </div>
             <div className='col mt-3 text-right'>
+              {this.state.src && (
+                <Link
+                  to={`/grep`}
+                  className='mr-2'
+                  style={{cursor: 'pointer'}}
+                >
+                  <span className='oi oi-magnifying-glass' />
+                </Link>
+              )}
               {this.state.description && (
                 <a
                   onClick={() => this.setState({showDescription: !this.state.showDescription})}
-                  style={{cursor: 'pointer'}}
+                  style={{cursor: 'pointer', color: '#007bff'}}
                 >
                   <span className='oi oi-document' />
                 </a>
@@ -72,6 +82,10 @@ class App extends Component {
           <Route
             path='/request/:id'
             component={() => <RoutePage routes={this.state.routes} hidePath={this.state.hidePath} />}
+          />
+          <Route
+            path='/grep'
+            component={() => <Grep hidePath={this.state.hidePath} />}
           />
         </div>
       </Router>

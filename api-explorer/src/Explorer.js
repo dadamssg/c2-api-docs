@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ReactPaginate from 'react-paginate'
 import {withRouter} from 'react-router-dom'
 import Route from './Route'
+import Search from './Search'
 
 class Explorer extends PureComponent {
   static propTypes = {
@@ -44,31 +45,16 @@ class Explorer extends PureComponent {
     routes = routes.slice(begin, end)
     return (
       <div>
-        <div className='input-group mb-3'>
-          <input
-            type='text'
-            value={search || ''}
+        <div className='mb-3'>
+          <Search
+            value={search}
             onChange={(e) => {
               this.redirect({
                 q: e.target.value,
                 page: 1
               })
             }}
-            className='form-control'
-            placeholder='Search'
           />
-          <div className='input-group-append'>
-            <button
-              className='btn btn-secondary'
-              type='button'
-              onClick={() => {
-                this.redirect({
-                  q: '',
-                  page: 1
-                })
-              }}
-            >&times;</button>
-          </div>
         </div>
         {routes.map((route, i) => (
           <div key={i} className={'mb-2'}>

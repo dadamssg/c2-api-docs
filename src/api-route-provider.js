@@ -72,16 +72,74 @@ export default function (app, options = {}) {
           payload: routeFile.payload
         }
       })
-      .filter(r => !['/_api', '/_docs', '/_path', '*'].includes(r.path))
+      .filter(r => !['/_api', '/_docs', '/_path', '/_grep', '*'].includes(r.path))
 
     return res.json({
       routes: cleaned,
       title: options.title,
       description: options.description,
-      hidePath: options.hidePath
+      hidePath: options.hidePath,
+      src: options.src
     })
   })
 
+  app.get('/_grep', (req, res) => {
+    const {q} = req.query
+    if (!q) {
+      return res.status(400).json({error: 'No search query param.'})
+    }
+    const searchTerm = q.replace(/'/g, "\\'")
+    // coalesce array of src dirs
+    const srcDirs = dirsToArray(options.src)
+    if (srcDirs.length === 0) {
+      return []
+    }
+    const files = {}
+    srcDirs.forEach(dir => {
+      let searchResult = ''
+      try {
+        searchResult = String(execSync(`grep -rn --include=\\*.js --include=\\*.json '${searchTerm}' ${dir}`))
+      } catch (e) {
+        searchResult = ''
+      }
+      // convert to array, filter blanks
+      searchResult.split('\n').filter(l => !!l).forEach(result => {
+        const firstColon = nthIndex(result, ':', 1)
+        const secondColon = nthIndex(result, ':', 2)
+        const file = result.substr(0, firstColon)
+        const lineNo = Number(result.substr(firstColon + 1, secondColon - (firstColon + 1)))
+        if (!files[file]) {
+          files[file] = {file, lineNos: []}
+        }
+        const existingLines = files[file].lineNos
+        if (existingLines.findIndex(no => no === lineNo) === -1) {
+          existingLines.push(lineNo)
+        }
+      })
+    })
+    const fileCount = Object.keys(files).length
+
+    if (fileCount > 20) {
+      return res
+        .status(400)
+        .json({error: `${fileCount} matching files found. Please refine your search.`})
+    }
+    // convert to array of objects
+    const matchedFiles = Object.keys(files)
+      .sort()
+      .map(key => files[key])
+      .map(ref => {
+        const content = fs.readFileSync(ref.file).toString()
+        const lines = content.split('\n')
+        return {
+          ...ref,
+          lines,
+          lastModified: getLastModified(ref.file)
+        }
+      })
+
+    res.json({q, files: matchedFiles})
+  })
   app.get('/_path', (req, res) => {
     const {path} = req.query
     if (!path) {
