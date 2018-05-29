@@ -55,11 +55,9 @@ export default class Response extends Component {
         </div>
         <div className='border mt-2 px-4 pt-2 pb-1'>
           <SyntaxHighlighter
-            lang='json'
+            language='json'
             lineNumberStyle={{color: '#c8c8c8'}}
-          >
-            {this.getResponse()}
-          </SyntaxHighlighter>
+          >{this.getResponse()}</SyntaxHighlighter>
         </div>
       </div>
     )
