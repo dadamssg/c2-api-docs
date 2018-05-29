@@ -26,7 +26,7 @@ document(app, {
   src: path.resolve(__dirname, '..', 'test-src'),
   server: path.resolve(__dirname, '..', 'test-api'),
   title: 'Example API Docs',
-  description: String(fs.readFileSync(path.resolve(__dirname, '..', 'README.md'))),
+  description: String(fs.readFileSync(path.resolve(__dirname, '..', 'readme.md'))),
   hidePath: path.resolve(__dirname, '..')
 })
 

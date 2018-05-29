@@ -32,6 +32,7 @@ app.use(bodyParser.json())
 
 documentAPI(app, {
   title: 'IOP API Docs',
+  description: String(fs.readFileSync(path.resolve(__dirname, '..', 'readme.md'))),
   routes: path.resolve(__dirname, 'routes'),
   src: path.resolve(__dirname, '..', 'src'),
   server: [
@@ -54,6 +55,9 @@ The second argument to the `documentAPI` function is a configuration object. All
 
 #### `title`
 Turns into the header of the api explorer.
+
+#### `description`
+General api description/documentation. Supports markdown.
 
 #### `routes`
 The directory to the route files. See route file documentation below.
