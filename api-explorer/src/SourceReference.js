@@ -19,7 +19,7 @@ export default class SourceReference extends PureComponent {
     const headingId = `heading-${id}`
     const collapseId = `collapse-${id}`
     const lineNumbers = typeof reference.lineNo === 'number' ? [reference.lineNo] : reference.lineNos
-    const filename = cleanFilename(`${reference.file.replace(hidePath, '')}:{lineNumbers.join(',')`)
+    const filename = cleanFilename(`${reference.file.replace(hidePath, '')}:${lineNumbers.join(',')}`)
 
     return (
       <div className='card'>
