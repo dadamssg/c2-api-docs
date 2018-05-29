@@ -1,11 +1,7 @@
 import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
-import SyntaxHighlighter, {registerLanguage} from 'react-syntax-highlighter/prism-light'
-import jsx from 'react-syntax-highlighter/languages/prism/jsx'
-import prism from 'react-syntax-highlighter/styles/prism/coy'
+import SyntaxHighlighter from './SyntaxHighlighter'
 import {cleanFilename, displayDate} from './utils'
-
-registerLanguage('jsx', jsx)
 
 export default class SourceReference extends PureComponent {
   static propTypes = {
@@ -54,8 +50,6 @@ export default class SourceReference extends PureComponent {
             {this.state.showCode && (
               <SyntaxHighlighter
                 language='jsx'
-                style={prism}
-                showLineNumbers
                 startingLineNumber={reference.startLineNo}
                 lineNumberStyle={no => ({color: lineNumbers.includes(no) ? '#007bff' : '#c8c8c8'})}
               >

@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
+import SyntaxHighlighter from './SyntaxHighlighter'
 
 function StatusBadge ({status}) {
   status = String(status)
@@ -52,11 +53,14 @@ export default class Response extends Component {
             </button>
           </div>
         </div>
-        <pre className={'border mt-2 bg-light'} style={{padding: '1rem'}}>
-          <code>
+        <div className='border mt-2 px-4 pt-2 pb-1'>
+          <SyntaxHighlighter
+            lang='json'
+            lineNumberStyle={{color: '#c8c8c8'}}
+          >
             {this.getResponse()}
-          </code>
-        </pre>
+          </SyntaxHighlighter>
+        </div>
       </div>
     )
   }

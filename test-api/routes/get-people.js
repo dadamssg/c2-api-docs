@@ -36,6 +36,8 @@ module.exports = {
       })
     }
     return res.status(200).json({
+      test: 123,
+      foo: false,
       people: [
         {
           name: 'John Doe'
