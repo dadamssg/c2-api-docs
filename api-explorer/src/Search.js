@@ -38,7 +38,7 @@ export default class Search extends PureComponent {
           />
           <div className='input-group-append'>
             <button
-              className='btn btn-secondary'
+              className='btn btn-primary'
               type='submit'
               onClick={onSubmit}
               disabled={disabled}
