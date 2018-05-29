@@ -52,7 +52,10 @@ class App extends Component {
             <div className='col mt-3 text-right'>
               {this.state.src && (
                 <Link
-                  to={`/grep`}
+                  to={{
+                    pathname: `/grep`,
+                    search: queryParams
+                  }}
                   className='mr-2'
                   style={{cursor: 'pointer'}}
                 >
