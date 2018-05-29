@@ -143,7 +143,7 @@ Ex. `['GET', 'POST', 'PUT', 'PATCH', 'DELETE']`
 Only used for documentation in the api explorer ui.
 
 #### `description`
-Only used for documentation in the api explorer ui. Supports markdown syntax.
+Only used for documentation in the api explorer ui. Supports markdown.
 
 #### `params`
 URL params are the tokens prefixed by `:` in the path. These params can be further defined:
