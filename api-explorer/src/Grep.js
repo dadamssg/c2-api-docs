@@ -50,7 +50,7 @@ export default class Grep extends PureComponent {
             <Spinner name='line-scale-pulse-out' fadeIn='quarter' />
           </div>
         )}
-        {!loading && searched && files.length === 0 && (
+        {!loading && searched && files.length === 0 && !error && (
           <div className='text-center mt-5'>
             No luck...
           </div>
