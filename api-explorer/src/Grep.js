@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 import Search from './Search'
 import axios from 'axios'
 import Spinner from 'react-spinkit'
+import {withRouter} from 'react-router-dom'
 import config from './config'
 import SourceReference from './SourceReference'
 
-export default class Grep extends PureComponent {
+class Grep extends PureComponent {
   static propTypes = {
-    hidePath: PropTypes.string
+    hidePath: PropTypes.string,
+    location: PropTypes.object
   }
   state = {
     loading: false,
@@ -23,8 +25,10 @@ export default class Grep extends PureComponent {
   onSubmit = () => {
     if (this.isDisabled()) return
     this.setState({loading: true, error: null, files: []})
-    const q = encodeURIComponent(this.state.search)
-    axios.get(`${config.api}/_grep?q=${q}`).then(res => {
+    const queryParams = new URLSearchParams(this.props.location.search)
+    queryParams.set('q', this.state.search)
+
+    axios.get(`${config.api}/_grep?${queryParams.toString()}`).then(res => {
       this.setState({...res.data, loading: false, searched: true})
     }).catch(error => {
       this.setState({loading: false, error: error.response.data.error})
@@ -80,3 +84,5 @@ export default class Grep extends PureComponent {
     )
   }
 }
+
+export default withRouter(Grep)
