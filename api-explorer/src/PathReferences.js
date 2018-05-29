@@ -77,7 +77,7 @@ class PathReferences extends PureComponent {
             {serverFiles.map((file, i) => (
               <ServerReference
                 key={i}
-                file={`${file.file}:${file.lineNo}`}
+                file={`${file.file}:${file.lines.join(',')}`}
                 modified={file.lastModified}
                 hidePath={hidePath}
               />

@@ -293,10 +293,12 @@ function findPathInServer (options, path) {
       const secondColon = nthIndex(result, ':', 2)
       const file = result.substr(0, firstColon)
       const lineNo = Number(result.substr(firstColon + 1, secondColon - (firstColon + 1)))
-      files[`${file}:${lineNo}`] = {
-        file,
-        lineNo,
-        lastModified: getLastModified(file)
+      if (!files[file]) {
+        files[file] = {file, lines: [], lastModified: getLastModified(file)}
+      }
+      const existingLines = files[file].lines
+      if (existingLines.findIndex(no => no === lineNo) === -1) {
+        existingLines.push(lineNo)
       }
     })
   })
