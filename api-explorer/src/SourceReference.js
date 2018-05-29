@@ -45,7 +45,7 @@ export default class SourceReference extends PureComponent {
               style={prism}
               showLineNumbers
               startingLineNumber={reference.startLineNo}
-              lineNumberStyle={no => reference.lineNo === no ? {color: '#007bff'} : null}
+              lineNumberStyle={no => ({color: reference.lineNo === no ? '#007bff' : '#c8c8c8'})}
             >
               {reference.lines.join('\n')}
             </SyntaxHighlighter>

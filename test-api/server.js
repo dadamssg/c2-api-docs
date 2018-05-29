@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import path from 'path'
 import cors from 'cors'
+import fs from 'fs'
 import document from '../src/api-route-provider'
 
 const app = express()
@@ -25,6 +26,7 @@ document(app, {
   src: path.resolve(__dirname, '..', 'test-src'),
   server: path.resolve(__dirname, '..', 'test-api'),
   title: 'Example API Docs',
+  description: String(fs.readFileSync(path.resolve(__dirname, '..', 'README.md'))),
   hidePath: path.resolve(__dirname, '..')
 })
 

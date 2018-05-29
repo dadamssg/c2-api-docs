@@ -22,3 +22,7 @@
 small {
     font-size: .75rem;
 }
+
+.card-body pre {
+    font-size: 76.5%;
+}

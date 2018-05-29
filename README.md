@@ -45,7 +45,6 @@ const PORT = process.env.PORT || 5033
 app.listen(PORT, () => {
   console.log('Dev Express server running at localhost:' + PORT)
 })
-
 ```
 
 After starting your mock server, you will have an api explorer at `http://localhost:<port>/_docs`.
@@ -103,7 +102,6 @@ export default {
     ]
   }
 }
-
 ```
 
 The equivalent json file of the above would look like below and behave identically.

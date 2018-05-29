@@ -1,12 +1,11 @@
 import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import {Link, withRouter} from 'react-router-dom'
-import {markdown} from 'markdown'
 import Response from './Response'
 import * as utils from './utils'
 import RequestForm from './RequestForm'
 import PathReferences from './PathReferences'
+import Markdown from './Markdown'
 
 class Route extends Component {
   static propTypes = {
@@ -63,12 +62,9 @@ class Route extends Component {
                 </h5>
               )}
               {route.description && (
-                <p
-                  className='card-text'
-                  dangerouslySetInnerHTML={{
-                    __html: markdown.toHTML(route.description) || ''
-                  }}
-                />
+                <div className='card-text'>
+                  <Markdown>{route.description}</Markdown>
+                </div>
               )}
               <div className={'text-left'}>
                 <hr />

@@ -6,12 +6,14 @@ import Explorer from './Explorer'
 import config from './config'
 import RoutePage from './RoutePage'
 import {buildRouteSearchString, normalizeParams} from './utils'
+import Markdown from './Markdown'
 
 const defaultTitle = 'API Docs'
 
 class App extends Component {
   state = {
-    routes: []
+    routes: [],
+    showDescription: false
   }
   componentDidMount () {
     axios.get(`${config.api}/_api`).then(res => {
@@ -40,9 +42,28 @@ class App extends Component {
     return (
       <Router basename={config.env === 'production' ? '/_docs/' : undefined}>
         <div className={'container mt-5'} style={{marginBottom: '5rem'}}>
-          <Link id='app-title' to={{pathname: '/', search: queryParams.toString()}}>
-            <h1>{this.state.title || defaultTitle}</h1>
-          </Link>
+          <div className='row'>
+            <div className='col'>
+              <Link id='app-title' to={{pathname: '/', search: queryParams.toString()}}>
+                <h1>{this.state.title || defaultTitle}</h1>
+              </Link>
+            </div>
+            <div className='col mt-3 text-right'>
+              {this.state.description && (
+                <a
+                  onClick={() => this.setState({showDescription: !this.state.showDescription})}
+                  style={{cursor: 'pointer'}}
+                >
+                  <span className='oi oi-document' />
+                </a>
+              )}
+            </div>
+          </div>
+          {this.state.description && this.state.showDescription && (
+            <div className='border px-4 pt-3 mb-3'>
+              <Markdown>{this.state.description}</Markdown>
+            </div>
+          )}
           <Route
             exact
             path='/'
