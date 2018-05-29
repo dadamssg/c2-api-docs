@@ -56,7 +56,6 @@ class App extends Component {
                     pathname: `/grep`,
                     search: queryParams.toString()
                   }}
-                  className='mr-2'
                   style={{cursor: 'pointer'}}
                 >
                   <span className='oi oi-magnifying-glass' />
@@ -64,6 +63,7 @@ class App extends Component {
               )}
               {this.state.description && (
                 <a
+                  className='ml-2'
                   onClick={() => this.setState({showDescription: !this.state.showDescription})}
                   style={{cursor: 'pointer', color: '#007bff'}}
                 >
