@@ -117,13 +117,7 @@ export default function (app, options = {}) {
         }
       })
     })
-    const fileCount = Object.keys(files).length
 
-    if (fileCount > 20) {
-      return res
-        .status(400)
-        .json({error: `${fileCount} matching files found. Please refine your search.`})
-    }
     // convert to array of objects
     const matchedFiles = Object.keys(files)
       .sort()
