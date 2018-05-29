@@ -8,7 +8,7 @@ import SourceReference from './SourceReference'
 
 export default class Grep extends PureComponent {
   static propTypes = {
-    loginId: PropTypes.string
+    hidePath: PropTypes.string
   }
   state = {
     loading: false,
@@ -71,7 +71,7 @@ export default class Grep extends PureComponent {
                 key={`file-${i}`}
                 id={`file-${i}`}
                 reference={file}
-                hidePath={''}
+                hidePath={this.props.hidePath}
               />
             ))}
           </div>
