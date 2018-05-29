@@ -18,7 +18,8 @@ class Explorer extends PureComponent {
       queryParams.set(key, values[key])
     })
     const search = queryParams.toString()
-    this.props.history.push({
+    const method = values.q === undefined ? 'push' : 'replace'
+    this.props.history[method]({
       pathname: '/',
       search: search ? `?${search}` : ''
     })

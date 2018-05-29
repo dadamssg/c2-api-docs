@@ -59,7 +59,7 @@ class Grep extends PureComponent {
               const queryParams = new URLSearchParams(this.props.location.search)
               queryParams.set('q', e.target.value)
               const search = queryParams.toString()
-              this.props.history.push({
+              this.props.history.replace({
                 pathname: '/grep',
                 search: search ? `?${search}` : ''
               })
