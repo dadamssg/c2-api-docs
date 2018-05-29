@@ -10,24 +10,30 @@ import SourceReference from './SourceReference'
 class Grep extends PureComponent {
   static propTypes = {
     hidePath: PropTypes.string,
-    location: PropTypes.object
+    location: PropTypes.object,
+    history: PropTypes.object
   }
   state = {
     loading: false,
-    search: '',
     files: [],
     searched: false
   }
+  componentDidMount () {
+    this.search()
+  }
   isDisabled = () => {
-    const {search, loading} = this.state
+    const search = this.getSearchString()
+    const {loading} = this.state
     return search.length < 3 || loading
   }
-  onSubmit = () => {
+  getSearchString = () => {
+    const queryParams = new URLSearchParams(this.props.location.search)
+    return queryParams.get('q') || ''
+  }
+  search = () => {
     if (this.isDisabled()) return
     this.setState({loading: true, error: null, files: []})
     const queryParams = new URLSearchParams(this.props.location.search)
-    queryParams.set('q', this.state.search)
-
     axios.get(`${config.api}/_grep?${queryParams.toString()}`).then(res => {
       this.setState({...res.data, loading: false, searched: true})
     }).catch(error => {
@@ -37,19 +43,28 @@ class Grep extends PureComponent {
   render () {
     const {
       loading,
-      search,
       searched,
       files,
       error
     } = this.state
+    const queryParams = new URLSearchParams(this.props.location.search)
+    const search = queryParams.get('q')
     return (
       <div>
         <div className='mb-3'>
           <Search
             value={search}
             placeholder='grep'
-            onChange={(e) => this.setState({search: e.target.value})}
-            onSubmit={this.onSubmit}
+            onChange={(e) => {
+              const queryParams = new URLSearchParams(this.props.location.search)
+              queryParams.set('q', e.target.value)
+              const search = queryParams.toString()
+              this.props.history.push({
+                pathname: '/grep',
+                search: search ? `?${search}` : ''
+              })
+            }}
+            onSubmit={this.search}
             disabled={this.isDisabled()}
           />
         </div>
