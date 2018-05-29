@@ -33,10 +33,16 @@ class App extends Component {
     })
   }
   render () {
+    const queryParams = new URLSearchParams(window.location.search)
+    // remove search query when clicking home
+    queryParams.set('q', '')
+    queryParams.set('page', 1)
     return (
       <Router basename={config.env === 'production' ? '/_docs/' : undefined}>
         <div className={'container mt-5'} style={{marginBottom: '5rem'}}>
-          <Link id='app-title' to={'/'}><h1>{this.state.title || defaultTitle}</h1></Link>
+          <Link id='app-title' to={{pathname: '/', search: queryParams.toString()}}>
+            <h1>{this.state.title || defaultTitle}</h1>
+          </Link>
           <Route
             exact
             path='/'

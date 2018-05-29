@@ -50,7 +50,7 @@ class Route extends Component {
               </a>
             </div>
             <div className='col-1 text-right'>
-              <Link to={`/request/${route.id}`}>
+              <Link to={{pathname: `/request/${route.id}`, search: this.props.location.search}}>
                 <span className='oi oi-link-intact' />
               </Link>
             </div>

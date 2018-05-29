@@ -25,13 +25,16 @@ class Explorer extends PureComponent {
   render () {
     const queryParams = new URLSearchParams(this.props.location.search)
     const search = (queryParams.get('q') || '').toLowerCase()
-    const page = Number(queryParams.get('page')) || 0
+    const queryPage = Number(queryParams.get('page')) || 1
+    const page = queryPage <= 1 ? 1 : queryPage
+    const zeroIndexPage = page - 1
+
     let routes = this.props.routes.filter(route => {
       return route.search.includes(search)
     })
     const numberPerPage = 20
     const pageCount = Math.ceil(routes.length / numberPerPage)
-    const begin = (page * numberPerPage)
+    const begin = (zeroIndexPage * numberPerPage)
     const end = begin + numberPerPage
     routes.sort((a, b) => {
       if (a.path < b.path) return -1
@@ -48,7 +51,7 @@ class Explorer extends PureComponent {
             onChange={(e) => {
               this.redirect({
                 q: e.target.value,
-                page: 0
+                page: 1
               })
             }}
             className='form-control'
@@ -61,7 +64,7 @@ class Explorer extends PureComponent {
               onClick={() => {
                 this.redirect({
                   q: '',
-                  page: 0
+                  page: 1
                 })
               }}
             >&times;</button>
@@ -76,13 +79,13 @@ class Explorer extends PureComponent {
           <ReactPaginate
             previousLabel='Prev'
             nextLabel='Next'
-            initialPage={page}
-            forcePage={page}
+            initialPage={zeroIndexPage || 0}
+            forcePage={zeroIndexPage || 0}
             pageCount={pageCount}
             marginPagesDisplayed={2}
             pageRangeDisplayed={2}
             onPageChange={({selected}) => {
-              this.redirect({page: selected})
+              this.redirect({page: selected + 1})
             }}
             containerClassName={`pagination ${pageCount <= 1 ? 'd-none' : ''}`}
             subContainerClassName='pages pagination'
