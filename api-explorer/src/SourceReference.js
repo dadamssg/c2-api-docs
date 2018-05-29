@@ -26,7 +26,7 @@ export default class SourceReference extends PureComponent {
         <div
           className='card-header'
           id={headingId}
-          style={{padding: '0rem'}}
+          style={{padding: '0rem', overflowX: 'scroll'}}
           title={displayDate(reference.lastModified)}>
           <span className='mb-0'>
             <button

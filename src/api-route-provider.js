@@ -105,7 +105,7 @@ export default function (app, options = {}) {
     srcDirs.forEach(dir => {
       let searchResult = ''
       try {
-        searchResult = String(execSync(`grep -rn --include=\\*.js --include=\\*.json '${searchTerm}' ${dir}`))
+        searchResult = String(execSync(`grep -rn -F --include=\\*.js --include=\\*.json '${searchTerm}' ${dir}`))
       } catch (e) {
         searchResult = ''
       }
@@ -132,15 +132,18 @@ export default function (app, options = {}) {
       .map(ref => {
         const content = fs.readFileSync(ref.file).toString()
         let lines = content.split('\n')
+        let startLineNo = 1
         // if only single line, show code window rather than entire file
         if (ref.lineNos.length === 1) {
           const lineNo = ref.lineNos[0]
           const startLine = lineNo - halfLines <= 1 ? 1 : lineNo - halfLines // start halfLines lines back
+          startLineNo = startLine
           const linesCopy = [...lines]
           lines = linesCopy.splice(startLine - 1, showLines)
         }
         return {
           ...ref,
+          startLineNo,
           lines,
           lastModified: getLastModified(ref.file)
         }
