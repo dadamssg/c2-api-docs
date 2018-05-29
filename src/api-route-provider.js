@@ -94,8 +94,11 @@ export default function (app, options = {}) {
       showLines = 10
     }
     const halfLines = Math.ceil(showLines / 2) - 1
+    if (q.includes('"') && q.includes("'")) {
+      return res.status({error: 'Searches cannot include both single and double quotes.'})
+    }
+    const escChar = q.includes("'") ? '"' : "'"
 
-    const searchTerm = q.replace(/'/g, "\\'")
     // coalesce array of src dirs
     const srcDirs = dirsToArray(options.src)
     if (srcDirs.length === 0) {
@@ -105,7 +108,7 @@ export default function (app, options = {}) {
     srcDirs.forEach(dir => {
       let searchResult = ''
       try {
-        searchResult = String(execSync(`grep -rn -F --include=\\*.js --include=\\*.json '${searchTerm}' ${dir}`))
+        searchResult = String(execSync(`grep -rnF --include=\\*.js --include=\\*.json ${escChar}${q}${escChar} ${dir}`))
       } catch (e) {
         searchResult = ''
       }
