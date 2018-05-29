@@ -88,6 +88,13 @@ export default function (app, options = {}) {
     if (!q) {
       return res.status(400).json({error: 'No search query param.'})
     }
+    // determine how many lines of code to show
+    let showLines = Number(req.query.lines)
+    if (isNaN(showLines) || showLines < 10) {
+      showLines = 10
+    }
+    const halfLines = Math.ceil(showLines / 2) - 1
+
     const searchTerm = q.replace(/'/g, "\\'")
     // coalesce array of src dirs
     const srcDirs = dirsToArray(options.src)
@@ -124,7 +131,14 @@ export default function (app, options = {}) {
       .map(key => files[key])
       .map(ref => {
         const content = fs.readFileSync(ref.file).toString()
-        const lines = content.split('\n')
+        let lines = content.split('\n')
+        // if only single line, show code window rather than entire file
+        if (ref.lineNos.length === 1) {
+          const lineNo = ref.lineNos[0]
+          const startLine = lineNo - halfLines <= 1 ? 1 : lineNo - halfLines // start halfLines lines back
+          const linesCopy = [...lines]
+          lines = linesCopy.splice(startLine - 1, showLines)
+        }
         return {
           ...ref,
           lines,

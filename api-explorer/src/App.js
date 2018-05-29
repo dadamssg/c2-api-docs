@@ -54,7 +54,7 @@ class App extends Component {
                 <Link
                   to={{
                     pathname: `/grep`,
-                    search: queryParams
+                    search: queryParams.toString()
                   }}
                   className='mr-2'
                   style={{cursor: 'pointer'}}
