@@ -127,11 +127,15 @@ export default function (app, options = {}) {
         }
       })
     })
-
+    const serverDirs = dirsToArray(options.server)
     // convert to array of objects
     const matchedFiles = Object.keys(files)
       .sort()
       .map(key => files[key])
+      .filter(ref => {
+        // filter out any server files
+        return !serverDirs.some(dir => ref.file.includes(dir))
+      })
       .map(ref => {
         const content = fs.readFileSync(ref.file).toString()
         let lines = content.split('\n')
