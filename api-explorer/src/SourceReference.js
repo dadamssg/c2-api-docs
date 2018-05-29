@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import SyntaxHighlighter, {registerLanguage} from 'react-syntax-highlighter/prism-light'
 import jsx from 'react-syntax-highlighter/languages/prism/jsx'
 import prism from 'react-syntax-highlighter/styles/prism/coy'
-import {displayDate} from './utils'
+import {cleanFilename, displayDate} from './utils'
 
 registerLanguage('jsx', jsx)
 
@@ -19,6 +19,8 @@ export default class SourceReference extends PureComponent {
     const headingId = `heading-${id}`
     const collapseId = `collapse-${id}`
     const lineNumbers = typeof reference.lineNo === 'number' ? [reference.lineNo] : reference.lineNos
+    const filename = cleanFilename(`${reference.file.replace(hidePath, '')}:{lineNumbers.join(',')`)
+
     return (
       <div className='card'>
         <div
@@ -34,7 +36,7 @@ export default class SourceReference extends PureComponent {
               data-toggle='collapse'
               data-target={`#${collapseId}`}
               aria-controls={collapseId}>
-              {reference.file.replace(hidePath, '')}:{lineNumbers.join(',')}
+              {filename}
             </button>
           </span>
         </div>

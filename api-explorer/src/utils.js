@@ -70,3 +70,7 @@ export function buildRouteSearchString (route) {
 export function displayDate (date) {
   return date ? moment(date).local().format('ddd, MMM Do YYYY, h:mm a') : ''
 }
+
+export function cleanFilename (file) {
+  return file.substr(0, 1) === '/' ? file.substr(1) : file
+}
